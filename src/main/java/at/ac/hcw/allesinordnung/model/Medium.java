@@ -5,6 +5,8 @@ public abstract class Medium {
 
     protected String title;
     protected String author;
+    //protected String genre;
+    //protected String publisher;
     protected int year;
 
     //JSON JAVAFX
