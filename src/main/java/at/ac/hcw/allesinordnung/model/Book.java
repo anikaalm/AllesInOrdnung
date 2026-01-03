@@ -9,6 +9,6 @@ public class Book extends Medium {
     }
     @Override
     public String type() {
-        return "CD";
+        return "Book";
     }
 }
