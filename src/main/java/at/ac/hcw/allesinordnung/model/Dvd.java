@@ -1,14 +1,14 @@
 package at.ac.hcw.allesinordnung.model;
 
-public class CD extends Medium{
+public class Dvd extends Medium{
+    Dvd(){}
 
-    CD(){}
-
-    CD(String title,String author, int year){
+    Dvd(String title, String author, int year){
         super(title,author,year);
     }
+
     @Override
     public String type() {
-        return "CD";
+        return "DVD";
     }
 }
