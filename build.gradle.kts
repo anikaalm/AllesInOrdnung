@@ -13,11 +13,9 @@ repositories {
     mavenCentral()
 }
 
-val junitVersion = "5.10.2"
-
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -27,7 +25,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("at.ac.hcw.allesinordnung")
-    mainClass.set("at.ac.hcw.allesinordnung.HelloApplication")
+    mainClass.set("at.ac.hcw.allesinordnung.HelloApplication") //  JavaFX Start
 }
 
 javafx {
@@ -36,8 +34,11 @@ javafx {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    // 🔹 JSON
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    // 🔹 Tests
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 }
 
 tasks.withType<Test> {
@@ -45,8 +46,13 @@ tasks.withType<Test> {
 }
 
 jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
-    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    imageZip.set(layout.buildDirectory.file("distributions/app-${javafx.platform.classifier}.zip"))
+    options.set(listOf(
+        "--strip-debug",
+        "--compress", "2",
+        "--no-header-files",
+        "--no-man-pages"
+    ))
     launcher {
         name = "app"
     }
