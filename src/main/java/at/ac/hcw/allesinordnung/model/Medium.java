@@ -3,35 +3,31 @@ package at.ac.hcw.allesinordnung.model;
 public abstract class Medium {
 
 
-    protected String title;
-    protected String author;
-    //protected String genre;
-    //protected String publisher;
-    protected int year;
+    private String title;
+    private String creator;
+    private String genre;
+    private int year;
 
-    //JSON JAVAFX
+
     Medium(){
 
     }
 
-    Medium(String title,String author, int year){
-        title=this.title;
-        author=this.author;
-        year=this.year;
+    Medium(String title,String creator,String genre, int year){
+        this.title = title;
+        this.creator = creator;
+        this.genre = genre;
+        this.year = year;
 
     }
 
     public String getTitle() {return title;}
-
-    public String getAuthor() {return author;}
-
+    public String getCreator() {return creator;}
+    public String getGenre() {return genre;}
     public int getYear() {return year;}
-
-
-    public void setAuthor(String author) {this.author = author;}
-
+    public void setCreator(String creator) {this.creator = creator;}
+    public void setGenre(String genre) {this.genre = genre;}
     public void setTitle(String title) {this.title = title;}
-
     public void setYear(int year) {this.year = year;}
 
     // which type of medium
