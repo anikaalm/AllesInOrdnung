@@ -31,5 +31,5 @@ public abstract class Medium {
     public void setYear(int year) {this.year = year;}
 
     // which type of medium
-    public abstract String type();
+    public abstract String getType();
 }

@@ -1,7 +1,7 @@
 package at.ac.hcw.allesinordnung.model;
 
 public class Cd extends Medium{
-    private String artist;
+
     private int runtime;
 
     Cd(){}
@@ -15,7 +15,7 @@ public class Cd extends Medium{
     public void setRuntime(int runtime) {this.runtime = runtime;}
 
     @Override
-    public String type() {
+    public String getType() {
         return "CD";
     }
 }

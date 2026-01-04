@@ -15,7 +15,7 @@ public class Book extends Medium {
     public void setPublisher(String publisher) {this.publisher=publisher;}
 
     @Override
-    public String type() {
+    public String getType() {
         return "Book";
     }
 }

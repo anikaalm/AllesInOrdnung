@@ -15,7 +15,7 @@ public class Dvd extends Medium{
     public void setRuntime(int runtime) {this.runtime = runtime;}
 
     @Override
-    public String type() {
+    public String getType() {
         return "DVD";
     }
 }
