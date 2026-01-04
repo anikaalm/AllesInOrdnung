@@ -4,9 +4,9 @@ public class Book extends Medium {
 
     private String publisher;
 
-    Book(){}
+    public Book(){}
 
-    Book(String title,String creator,String genre, int year, String publisher){
+    public Book(String title,String creator,String genre, int year, String publisher){
         super(title,creator,genre,year);
         this.publisher = publisher;
     }

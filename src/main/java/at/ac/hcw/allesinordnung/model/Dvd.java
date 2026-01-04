@@ -4,9 +4,9 @@ public class Dvd extends Medium{
 
     private int runtime;
 
-    Dvd(){}
+    public Dvd(){}
 
-    Dvd(String title, String creator, String genre, int year, int runtime){
+    public Dvd(String title, String creator, String genre, int year, int runtime){
         super(title,creator,genre,year);
         this.runtime = runtime;
     }

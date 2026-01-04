@@ -4,9 +4,9 @@ public class Cd extends Medium{
 
     private int runtime;
 
-    Cd(){}
+    public Cd(){}
 
-    Cd(String title,String creator,String genre, int year, int runtime){
+    public Cd(String title,String creator,String genre, int year, int runtime){
         super(title,creator,genre,year);
         this.runtime = runtime;
     }

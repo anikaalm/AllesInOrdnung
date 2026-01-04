@@ -13,9 +13,26 @@ public class CollectionManager {
 
     private final List<Medium> media = new ArrayList<>();
 
+
     public List<Medium> showAllMedia () {
-        // anzeige wenn noch nichts in der sammlung ist noch hinzufügen
+       // for (Medium m : media) {
+            //System.out.println(m);
+        //}
         return media;
+        // anzeige wenn noch nichts in der sammlung ist noch hinzufügen
+
+    }
+
+    public void add(Medium medium){
+
+        for (Medium m : media){
+            if(m.equals(medium)) { // equals nochmals recherchieren
+                System.out.println(medium.getType()+"bereits in der Sammlung vorhanden");
+            }else{
+                media.add(medium);
+            }
+        }
+
     }
 
     public List<Medium> searchByTitle(String word){
@@ -42,6 +59,8 @@ public class CollectionManager {
             if(m.getTitle().contains(name)) {
                 found.add(m);
             }
+
+
         }return found;
     }
 
@@ -56,7 +75,6 @@ public class CollectionManager {
         }return found;
     }
 
-    // suche oder doch schon filter??
     public List<Medium> searchByGenre(String genre){
 
         List<Medium>found = new ArrayList<>();
@@ -70,9 +88,6 @@ public class CollectionManager {
 
 
 
-    public void add(Medium medium){
-        media.add(medium);
-    }
 
     public void editBook(Book book,String title,String creator,String genre, int year, String publisher) {
 
@@ -110,6 +125,7 @@ public class CollectionManager {
 
 
     // evt noch vor löschung fragen ob nutzer sich sicher ist, dass er das medium löschen möchte
+    // boolean rückgeb?
     public void delete(Medium medium){
         media.remove(medium);
         if (medium instanceof Book) {
@@ -120,5 +136,9 @@ public class CollectionManager {
 
     }
 
+
+
 }
+
+
 

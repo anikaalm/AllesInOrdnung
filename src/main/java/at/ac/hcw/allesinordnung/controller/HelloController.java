@@ -1,4 +1,4 @@
-package at.ac.hcw.allesinordnung;
+package at.ac.hcw.allesinordnung.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

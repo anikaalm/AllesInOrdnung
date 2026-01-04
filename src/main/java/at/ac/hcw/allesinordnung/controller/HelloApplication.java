@@ -1,8 +1,14 @@
-package at.ac.hcw.allesinordnung;
+package at.ac.hcw.allesinordnung.controller;
 
+import at.ac.hcw.allesinordnung.manager.CollectionManager;
+import at.ac.hcw.allesinordnung.model.Book;
+import at.ac.hcw.allesinordnung.model.Cd;
+import at.ac.hcw.allesinordnung.model.Dvd;
+import at.ac.hcw.allesinordnung.model.Medium;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,4 +26,9 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+
+
+
+
 }
