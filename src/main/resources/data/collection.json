@@ -5,7 +5,10 @@
     "title": "Der kleine Prinz",
     "creator": "Saint-Exupéry",
     "genre": "Roman",
-    "year": 1943
+    "year": 1943,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
   },
   {
     "type": "CD",
@@ -13,7 +16,10 @@
     "title": "Thriller",
     "creator": "Michael Jackson",
     "genre": "Pop",
-    "year": 1982
+    "year": 1982,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
   },
   {
     "type": "DVD",
@@ -21,6 +27,64 @@
     "title": "Matrix",
     "creator": "Wachowskis",
     "genre": "Sci-Fi",
-    "year": 1999
+    "year": 1999,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
+  },
+  {
+    "type": "CD",
+    "runtime": 48,
+    "title": "21",
+    "creator": "Adele",
+    "genre": "Pop",
+    "year": 2011,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
+  },
+  {
+    "type": "BOOK",
+    "publisher": "Reclam",
+    "title": "Faust I",
+    "creator": "Goethe",
+    "genre": "Klassik",
+    "year": 2001,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
+  },
+  {
+    "type": "CD",
+    "runtime": 48,
+    "title": "25",
+    "creator": "Adele",
+    "genre": "Pop",
+    "year": 2015,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
+  },
+  {
+    "type": "CD",
+    "runtime": 52,
+    "title": "33",
+    "creator": "KJ",
+    "genre": "Rap",
+    "year": 2011,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
+  },
+  {
+    "type": "CD",
+    "runtime": 50,
+    "title": "blbl",
+    "creator": "lele",
+    "genre": "Rap",
+    "year": 2000,
+    "favorite": false,
+    "rating": 0,
+    "folder": ""
   }
 ]

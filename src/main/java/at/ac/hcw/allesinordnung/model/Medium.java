@@ -8,6 +8,9 @@ public abstract class Medium {
     private String genre;
     private int year;
 
+    private boolean favorite = false;  // Standard: nicht favorisiert
+    private int rating = 0;            // optional, für Sternebewertung
+    private String folder = "";        // optional, für Gruppierung leer = kein Ordner
 
     Medium(){
 
@@ -32,4 +35,32 @@ public abstract class Medium {
 
     // which type of medium
     public abstract String getType();
+
+    // Getter / Setter für favorite
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    // Getter / Setter für rating
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    // Getter / Setter für folder
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
 }
