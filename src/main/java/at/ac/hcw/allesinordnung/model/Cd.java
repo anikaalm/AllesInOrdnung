@@ -1,7 +1,7 @@
 package at.ac.hcw.allesinordnung.model;
 
 public class Cd extends Medium{
-
+    private final String type = "CD";
     private int runtime;
 
     public Cd(){}
@@ -16,6 +16,6 @@ public class Cd extends Medium{
 
     @Override
     public String getType() {
-        return "CD";
+        return type;
     }
 }

@@ -1,7 +1,7 @@
 package at.ac.hcw.allesinordnung.model;
 
 public class Dvd extends Medium{
-
+    private final String type = "DVD";
     private int runtime;
 
     public Dvd(){}
@@ -16,6 +16,6 @@ public class Dvd extends Medium{
 
     @Override
     public String getType() {
-        return "DVD";
+        return type;
     }
 }

@@ -26,6 +26,7 @@ tasks.withType<JavaCompile> {
 application {
     mainModule.set("at.ac.hcw.allesinordnung")
     mainClass.set("at.ac.hcw.allesinordnung.HelloApplication") //  JavaFX Start
+    mainClass.set("at.ac.hcw.allesinordnung.demo.StorageDemo")
 }
 
 javafx {
