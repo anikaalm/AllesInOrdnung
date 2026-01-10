@@ -1,38 +1,5 @@
 [
   {
-    "type": "BOOK",
-    "publisher": "Reclam",
-    "title": "Der kleine Prinz",
-    "creator": "Saint-Exupéry",
-    "genre": "Roman",
-    "year": 1943,
-    "favorite": false,
-    "rating": 0,
-    "folder": ""
-  },
-  {
-    "type": "CD",
-    "runtime": 9,
-    "title": "Thriller",
-    "creator": "Michael Jackson",
-    "genre": "Pop",
-    "year": 1982,
-    "favorite": false,
-    "rating": 0,
-    "folder": ""
-  },
-  {
-    "type": "DVD",
-    "runtime": 136,
-    "title": "Matrix",
-    "creator": "Wachowskis",
-    "genre": "Sci-Fi",
-    "year": 1999,
-    "favorite": false,
-    "rating": 0,
-    "folder": ""
-  },
-  {
     "type": "CD",
     "runtime": 48,
     "title": "21",
@@ -41,15 +8,26 @@
     "year": 2011,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "Pop"
   },
   {
     "type": "BOOK",
     "publisher": "Reclam",
-    "title": "Faust I",
+    "title": "Faust",
     "creator": "Goethe",
     "genre": "Klassik",
-    "year": 2001,
+    "year": 2000,
+    "favorite": true,
+    "rating": 5,
+    "folder": "Klassiker"
+  },
+  {
+    "type": "BOOK",
+    "publisher": "Pan Macmillan",
+    "title": "Before the coffee gets cold",
+    "creator": "Toshikazu Kawaguchi",
+    "genre": "science fiction",
+    "year": 2015,
     "favorite": false,
     "rating": 0,
     "folder": ""
@@ -79,9 +57,9 @@
   {
     "type": "CD",
     "runtime": 50,
-    "title": "blbl",
-    "creator": "lele",
-    "genre": "Rap",
+    "title": "was geht",
+    "creator": "alles",
+    "genre": "Jazz",
     "year": 2000,
     "favorite": false,
     "rating": 0,

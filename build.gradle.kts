@@ -9,7 +9,11 @@ plugins {
 group = "at.ac.hcw"
 version = "1.0-SNAPSHOT"
 
+
 repositories {
+    /*
+    hier sagen wir Gradle, woher es externe Bibliotheken laden darf
+    */
     mavenCentral()
 }
 
@@ -35,10 +39,18 @@ javafx {
 }
 
 dependencies {
-    // 🔹 JSON
+    /*
+    JSON-Serialisierung, um unsere Medium-Liste in collection.json zu speichern und wieder zu laden.
+    Gson macht Polymorphie möglich, gemeinsam mit MediumAdapter.
+    Ohne diese Dependency könnte der Code nicht JSON lesen oder schreiben.
+     */
     implementation("com.google.code.gson:gson:2.11.0")
 
-    // 🔹 Tests
+
+    /*
+    JUnit -> Für Tests (automatisches Prüfen von add, delete, load, save).
+    So kann man die Methoden unabhängig von GUI testen
+     */
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 }
 

@@ -114,15 +114,29 @@ public class CollectionManager {
     }
 
     // ---------------- Favoriten / Bewertung ----------------
-    public void markFavorite(Medium m, boolean favorite) {
-        m.setFavorite(favorite);
-        storage.save(media);
+    public List<Medium> getFavorites() {
+        return media.stream()
+                .filter(Medium::isFavorite)
+                .toList();
     }
+
+    public void setFavorite(Medium medium, boolean favorite) {
+        for (Medium m : media) {
+            if (m.equals(medium)) {
+                m.setFavorite(favorite);   // ← WICHTIG: m, nicht medium
+                storage.save(media);
+                return;
+            }
+        }
+    }
+
+
 
     public void rateMedium(Medium m, int rating) {
         m.setRating(rating);
         storage.save(media);
     }
+
 
     // ---------------- Ordner / Gruppierung ----------------
 

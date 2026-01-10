@@ -1,5 +1,7 @@
 package at.ac.hcw.allesinordnung.model;
 
+import java.util.Objects;
+
 public abstract class Medium {
 
 
@@ -61,6 +63,25 @@ public abstract class Medium {
 
     public void setFolder(String folder) {
         this.folder = folder;
+    }
+
+    /*
+    Damit werden Objekte mit gleichen Daten als gleich erkannt, egal welches Objekt es ist:
+    Jetzt erkennt addMedium() echte Duplikate → wird ignoriert.
+    */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Medium m)) return false;
+        return year == m.getYear() &&
+                title.equalsIgnoreCase(m.getTitle()) &&
+                creator.equalsIgnoreCase(m.getCreator()) &&
+                getType().equalsIgnoreCase(m.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title.toLowerCase(), creator.toLowerCase(), year, getType().toLowerCase());
     }
 
 }
