@@ -1,6 +1,8 @@
 package at.ac.hcw.allesinordnung.demo;
 
 import at.ac.hcw.allesinordnung.model.Book;
+import at.ac.hcw.allesinordnung.model.Cd;
+import at.ac.hcw.allesinordnung.model.Dvd;
 import at.ac.hcw.allesinordnung.model.Medium;
 import at.ac.hcw.allesinordnung.persistence.JsonFileStorage;
 
@@ -24,6 +26,10 @@ public class StorageDemo {
                     1943,
                     "Reclam"
             ));
+
+            media.add(new Cd("Thriller", "Michael Jackson", "Pop", 1982, 9));
+            media.add(new Dvd("Matrix", "Wachowskis", "Sci-Fi", 1999, 136));
+
 
             storage.save(media);
 

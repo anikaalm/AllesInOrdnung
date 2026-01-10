@@ -1,0 +1,26 @@
+[
+  {
+    "type": "BOOK",
+    "publisher": "Reclam",
+    "title": "Der kleine Prinz",
+    "creator": "Saint-Exupéry",
+    "genre": "Roman",
+    "year": 1943
+  },
+  {
+    "type": "CD",
+    "runtime": 9,
+    "title": "Thriller",
+    "creator": "Michael Jackson",
+    "genre": "Pop",
+    "year": 1982
+  },
+  {
+    "type": "DVD",
+    "runtime": 136,
+    "title": "Matrix",
+    "creator": "Wachowskis",
+    "genre": "Sci-Fi",
+    "year": 1999
+  }
+]
