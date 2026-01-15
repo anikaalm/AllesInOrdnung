@@ -1,68 +1,35 @@
 [
   {
-    "type": "CD",
-    "runtime": 48,
-    "title": "21",
-    "creator": "Adele",
-    "genre": "Pop",
-    "year": 2011,
-    "favorite": false,
-    "rating": 0,
-    "folder": "Pop"
-  },
-  {
-    "type": "BOOK",
     "publisher": "Reclam",
-    "title": "Faust",
-    "creator": "Goethe",
-    "genre": "Klassik",
-    "year": 2000,
-    "favorite": true,
-    "rating": 5,
-    "folder": "Klassiker"
-  },
-  {
-    "type": "BOOK",
-    "publisher": "Pan Macmillan",
-    "title": "Before the coffee gets cold",
-    "creator": "Toshikazu Kawaguchi",
-    "genre": "science fiction",
-    "year": 2015,
+    "title": "Der kleine Prinz",
+    "creator": "Saint-Exupéry",
+    "genre": "Roman",
+    "year": 1943,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "BOOK"
   },
   {
-    "type": "CD",
-    "runtime": 48,
-    "title": "25",
-    "creator": "Adele",
+    "runtime": 9,
+    "title": "Thriller",
+    "creator": "Michael Jackson",
     "genre": "Pop",
-    "year": 2015,
+    "year": 1982,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "CD"
   },
   {
-    "type": "CD",
-    "runtime": 52,
-    "title": "33",
-    "creator": "KJ",
-    "genre": "Rap",
-    "year": 2011,
+    "runtime": 136,
+    "title": "Matrix",
+    "creator": "Wachowskis",
+    "genre": "Sci-Fi",
+    "year": 1999,
     "favorite": false,
     "rating": 0,
-    "folder": ""
-  },
-  {
-    "type": "CD",
-    "runtime": 50,
-    "title": "was geht",
-    "creator": "alles",
-    "genre": "Jazz",
-    "year": 2000,
-    "favorite": false,
-    "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "DVD"
   }
 ]

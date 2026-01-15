@@ -15,5 +15,7 @@ module at.ac.hcw.allesinordnung {
     opens at.ac.hcw.allesinordnung.persistence to com.google.gson;
 
     // Optional: Export (für saubere Modulgrenzen)
+    exports at.ac.hcw.allesinordnung.controller;
     exports at.ac.hcw.allesinordnung.model;
+
 }
