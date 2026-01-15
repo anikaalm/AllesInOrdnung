@@ -23,7 +23,7 @@ public class JsonFileStorage {
                 .create();
     }
 
-    // ----------------------------------------
+
     // save() Methode
     public void save(List<Medium> media) {
         try (Writer writer = new FileWriter(file)) {
@@ -33,7 +33,7 @@ public class JsonFileStorage {
         }
     }
 
-    // ----------------------------------------
+
     // load() Methode
     public List<Medium> load() {
         if (!file.exists()) return new ArrayList<>();
