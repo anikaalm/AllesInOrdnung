@@ -26,7 +26,6 @@ public class Main {
             Medium d1 = new Dvd("Das Barbie Tagebuch", "Universal Pictures", "Zeichentrick", 2006, 70);
 
 
-
             manager.addMedium(c1);
             manager.addMedium(b1);
             manager.addMedium(b2);

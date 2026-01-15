@@ -37,7 +37,6 @@ public class JsonFileStorage {
     // load() Methode
     public List<Medium> load() {
         if (!file.exists()) return new ArrayList<>();
-
         try (Reader reader = new FileReader(file)) {
             Type listType = new com.google.gson.reflect.TypeToken<List<Medium>>() {}.getType();
             return gson.fromJson(reader, listType);

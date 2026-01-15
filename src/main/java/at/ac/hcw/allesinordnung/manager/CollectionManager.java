@@ -140,7 +140,6 @@ public class CollectionManager {
 
     //Ordner / Gruppierung
 
-
     public void setFolder(Medium m, String folder) {
         m.setFolder(folder);
         storage.save(media);
@@ -151,7 +150,6 @@ public class CollectionManager {
                 .filter(m -> m.getFolder().equalsIgnoreCase(folder))
                 .collect(Collectors.toList());
     }
-
 
     //Getter
     public List<Medium> getAllMedia() {

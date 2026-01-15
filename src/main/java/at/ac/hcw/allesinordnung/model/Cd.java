@@ -14,6 +14,7 @@ public class Cd extends Medium{
     }
 
     public int getRuntime() {return runtime;}
+
     public void setRuntime(int runtime) {
         this.runtime = runtime;}
 

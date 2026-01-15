@@ -6,7 +6,6 @@ import at.ac.hcw.allesinordnung.model.Dvd;
 import at.ac.hcw.allesinordnung.model.Medium;
 import at.ac.hcw.allesinordnung.persistence.JsonFileStorage;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
