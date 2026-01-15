@@ -66,6 +66,7 @@ jlink {
         "--no-header-files",
         "--no-man-pages"
     ))
+
     launcher {
         name = "app"
     }
