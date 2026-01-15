@@ -1,10 +1,12 @@
 package at.ac.hcw.allesinordnung.model;
 
 public class Book extends Medium {
-    private final String type = "BOOK";
+
     private String publisher;
 
-    public Book(){}
+    public Book(){
+        super();
+    }
 
     public Book(String title,String creator,String genre, int year, String publisher){
         super(title,creator,genre,year);
@@ -16,7 +18,12 @@ public class Book extends Medium {
 
     @Override
     public String getType() {
-        return type;
+        return "BOOK";
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + publisher;
     }
 }
 

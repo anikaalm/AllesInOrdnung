@@ -1,10 +1,11 @@
 package at.ac.hcw.allesinordnung.model;
 
 public class Dvd extends Medium{
-    private final String type = "DVD";
     private int runtime;
 
-    public Dvd(){}
+    public Dvd(){
+        super();
+    }
 
     public Dvd(String title, String creator, String genre, int year, int runtime){
         super(title,creator,genre,year);
@@ -12,10 +13,16 @@ public class Dvd extends Medium{
     }
 
     public int getRuntime() {return runtime;}
-    public void setRuntime(int runtime) {this.runtime = runtime;}
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;}
 
     @Override
     public String getType() {
-        return type;
+        return "DVD";
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + runtime + "Min";
     }
 }

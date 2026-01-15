@@ -14,7 +14,10 @@ public abstract class Medium {
     private int rating = 0;            // optional, für Sternebewertung
     private String folder = "";        // optional, für Gruppierung leer = kein Ordner
 
+    private String type;
+
     Medium(){
+        this.type=getType();
 
     }
 
@@ -23,6 +26,7 @@ public abstract class Medium {
         this.creator = creator;
         this.genre = genre;
         this.year = year;
+        this.type = getType();
 
     }
 
@@ -35,35 +39,33 @@ public abstract class Medium {
     public void setTitle(String title) {this.title = title;}
     public void setYear(int year) {this.year = year;}
 
+    @Override
+    public String toString() {
+        return getType() + this.title + " " +
+                           this.creator + " " +
+                           this.year + " " +
+                           this.genre;
+    }
+
     // which type of medium
     public abstract String getType();
 
     // Getter / Setter für favorite
-    public boolean isFavorite() {
-        return favorite;
-    }
+    public boolean isFavorite() {return favorite;}
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
 
     // Getter / Setter für rating
-    public int getRating() {
-        return rating;
-    }
-
+    public int getRating() {return rating;}
     public void setRating(int rating) {
-        this.rating = rating;
-    }
+        this.rating = rating;}
 
     // Getter / Setter für folder
-    public String getFolder() {
-        return folder;
-    }
-
+    public String getFolder() {return folder;}
     public void setFolder(String folder) {
-        this.folder = folder;
-    }
+        this.folder = folder;}
 
     /*
     Damit werden Objekte mit gleichen Daten als gleich erkannt, egal welches Objekt es ist:
