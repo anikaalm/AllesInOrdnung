@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="at.ac.hcw.allesinordnung.controller.HeaderController"
+            styleClass="header-bar">
+
+    <!-- LINKS: Titel -->
+    <left>
+        <Label text="Willkommen :)"
+               styleClass="welcome-title"
+               BorderPane.alignment="CENTER_LEFT"/>
+    </left>
+
+    <!-- RECHTS: DEIN CODE -->
+    <right>
+        <VBox spacing="6"
+              alignment="TOP_RIGHT">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+
+            <!-- Home Button -->
+            <Button text="🏠"
+                    onAction="#goToMenu"
+                    styleClass="home-btn">
+                <tooltip>
+                    <Tooltip text="Zurück zum Hauptmenü"/>
+                </tooltip>
+            </Button>
+
+            <!-- Suchbereich -->
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <TextField fx:id="searchField" promptText="Suchen..." prefWidth="260"/>
+                <Button text="🔎" onAction="#onSearch" styleClass="icon-btn"/>
+            </HBox>
+
+        </VBox>
+    </right>
+
+</BorderPane>

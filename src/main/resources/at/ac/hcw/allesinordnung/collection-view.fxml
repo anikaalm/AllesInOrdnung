@@ -12,6 +12,7 @@
       fx:controller="at.ac.hcw.allesinordnung.controller.CollectionController"
       spacing="20.0" alignment="CENTER" prefWidth="600.0" prefHeight="400.0">
 
+
     <!-- Titel -->
     <Label text="Alles in Ordnung - Medienübersicht" style="-fx-font-size: 20px;"/>
 
@@ -51,4 +52,3 @@
     </HBox>
 
 </VBox>
-

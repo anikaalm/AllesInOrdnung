@@ -152,4 +152,22 @@ public class CollectionController {
         }
     }
 
+
+    public void applyQuery(String q) {
+        if (q == null || q.isBlank()) { showAll(); return; }
+
+        // Ergebnisse aus vorhandenen Manager-Methoden kombinieren
+        java.util.LinkedHashSet<Medium> set = new java.util.LinkedHashSet<>();
+        set.addAll(manager.searchByTitle(q));
+        set.addAll(manager.searchByCreator(q));
+        try {
+            int year = Integer.parseInt(q.trim());
+            set.addAll(manager.searchByYear(year));
+        } catch (NumberFormatException ignore) { /* Jahr optional */ }
+        set.addAll(manager.searchByGenre(q));
+
+        mediaListView.getItems().setAll(set);
+    }
+
+
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="at.ac.hcw.allesinordnung.controller.MenuController"
+            stylesheets="@dark-theme.css"
+            styleClass="root">
+
+    <!-- HEADER -->
+    <top>
+        <fx:include source="header.fxml"/>
+    </top>
+
+    <!-- MENÜ LINKS MITTIG -->
+    <left>
+        <VBox spacing="18"
+              alignment="CENTER_LEFT"
+              BorderPane.alignment="CENTER">
+
+            <padding>
+                <Insets top="60" left="40"/>
+            </padding>
+
+            <Button text="Bücher"
+                    onAction="#openBooks"
+                    styleClass="menu-link"/>
+
+            <Button text="DVDs"
+                    onAction="#openDvds"
+                    styleClass="menu-link"/>
+
+            <Button text="CDs"
+                    onAction="#openCds"
+                    styleClass="menu-link"/>
+
+            <Button text="ganzes Verzeichnis"
+                    onAction="#openAll"
+                    styleClass="menu-link"/>
+
+            <Button text="Datei erstellen"
+                    onAction="#createFile"
+                    styleClass="menu-link"/>
+
+        </VBox>
+    </left>
+
+    <!-- REST LEER -->
+    <center>
+        <Region/>
+    </center>
+
+</BorderPane>

@@ -9,41 +9,51 @@
             stylesheets="@dark-theme.css"
             styleClass="root">
 
+    <!-- TOP: Header + Medienübersicht-Buttons -->
     <top>
         <VBox spacing="10">
-            <padding>
-                <Insets top="16" right="16" bottom="16" left="16"/>
-            </padding>
 
-            <Label text="Medienübersicht"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <!-- Header immer sichtbar -->
+            <fx:include source="header.fxml"/>
 
-            <HBox spacing="8" alignment="CENTER_LEFT">
+            <!-- Medienübersicht Titel + Buttons -->
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
 
-                <Button text="Alle"   onAction="#showAll"/>
-                <Button text="Bücher" onAction="#showBooks"/>
-                <Button text="CDs"    onAction="#showCds"/>
-                <Button text="DVDs"   onAction="#showDvds"/>
+                <Label text="Medienübersicht"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-                <Separator orientation="VERTICAL"/>
+                <HBox spacing="8" alignment="CENTER_LEFT">
 
-                <Button text="Titel"
-                        onAction="#searchByTitle"/>
-                <Button text="Autor/Künstler"
-                        onAction="#searchByCreator"/>
-                <Button text="Jahr"
-                        onAction="#searchByYear"/>
-                <Button text="Genre"
-                        onAction="#searchByGenre"/>
+                    <Button text="Alle"   onAction="#showAll"/>
+                    <Button text="Bücher" onAction="#showBooks"/>
+                    <Button text="CDs"    onAction="#showCds"/>
+                    <Button text="DVDs"   onAction="#showDvds"/>
 
-            </HBox>
+                    <Separator orientation="VERTICAL"/>
+
+                    <Button text="Titel"
+                            onAction="#searchByTitle"/>
+                    <Button text="Autor/Künstler"
+                            onAction="#searchByCreator"/>
+                    <Button text="Jahr"
+                            onAction="#searchByYear"/>
+                    <Button text="Genre"
+                            onAction="#searchByGenre"/>
+
+                </HBox>
+            </VBox>
         </VBox>
     </top>
 
+    <!-- CENTER: Medienliste -->
     <center>
         <ListView fx:id="mediaListView"/>
     </center>
 
+    <!-- BOTTOM: Aktionen -->
     <bottom>
         <HBox spacing="10">
             <padding>
@@ -58,7 +68,6 @@
                     onAction="#toggleFavorite"/>
             <Button text="Ordner setzen"
                     onAction="#setFolderForSelected"/>
-
         </HBox>
     </bottom>
 

@@ -1,6 +1,6 @@
 package at.ac.hcw.allesinordnung.controller;
 
-
+import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.input.MouseEvent;
 
-    public class WelcomeController {
+public class WelcomeController {
 
 
         @FXML
@@ -18,16 +18,22 @@ import javafx.scene.input.MouseEvent;
             System.out.println("Klick – weiter zur Hauptansicht");
 
             try {
+
+                var url = getClass().getResource("/at/ac/hcw/allesinordnung/menu-view.fxml");
+                if (url == null) {
+                    throw new IllegalStateException("menu-view.fxml nicht gefunden. " +
+                            "Erwarte: src/main/resources/at/ac/hcw/allesinordnung/menu-view.fxml");
+                }
+
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource(
-                                "/at/ac/hcw/allesinordnung/main-view.fxml"
-                        )
-                );
+                        /*getClass().getResource(
+                                "/at/ac/hcw/allesinordnung/main-view.fxml" )*/
+                        url);
 
 
                 Parent root = loader.load();
 
-                Scene newScene = new Scene(root, 600, 400);
+                Scene newScene = new Scene(root, 900, 650);
 
 
                 // Dark Theme anwenden
@@ -38,7 +44,7 @@ import javafx.scene.input.MouseEvent;
 
 
 
-                Stage stage = (Stage) ((Scene) ((javafx.scene.Node) event.getSource()).getScene()).getWindow();
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(newScene);
                 stage.show();
 
@@ -46,12 +52,12 @@ import javafx.scene.input.MouseEvent;
             } catch (IOException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR,
-                        "Konnte main-view.fxml nicht laden:\n" + e.getMessage()
+                        "Konnte menu-view.fxml nicht laden:\n" + e.getMessage()
                 ).showAndWait();
 
             }
         }
-    }
+}
 
 
 
