@@ -14,7 +14,8 @@
     <top>
         <VBox spacing="10">
             <!-- Globaler Header -->
-            <fx:include source="header.fxml"/>
+            <fx:include fx:id="header" source="header.fxml"/>
+
 
             <!-- Titelzeile + Buttons -->
             <HBox spacing="12" alignment="CENTER_LEFT">
