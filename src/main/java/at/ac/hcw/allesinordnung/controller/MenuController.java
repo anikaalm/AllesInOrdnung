@@ -11,9 +11,8 @@ import javafx.stage.Stage;
 
 public class MenuController {
 
-    // ------------------------------------------------------------
+
     // Gemeinsamer Loader für die Medienübersicht (main-view.fxml)
-    // ------------------------------------------------------------
     private void gotoCollection(Node any, java.util.function.Consumer<CollectionController> afterLoad) {
         try {
             var url = getClass().getResource("/at/ac/hcw/allesinordnung/main-view.fxml");

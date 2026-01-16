@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
-import java.util.Objects;
+
 import java.util.function.Consumer;
 
 public class HeaderController {

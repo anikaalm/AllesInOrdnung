@@ -85,5 +85,4 @@ public abstract class Medium {
     public int hashCode() {
         return Objects.hash(title.toLowerCase(), creator.toLowerCase(), year, getType().toLowerCase());
     }
-
 }
