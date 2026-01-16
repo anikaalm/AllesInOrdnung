@@ -109,9 +109,9 @@ public class CollectionController {
             if (selected instanceof Book book) {
                 manager.editBook(book, newTitle.get(), book.getCreator(), book.getGenre(), book.getYear(), book.getPublisher());
             } else if (selected instanceof Cd cd) {
-                manager.editOther(cd, newTitle.get(), cd.getCreator(), cd.getGenre(), cd.getYear(), cd.getRuntime());
+                manager.editCD(cd, newTitle.get(), cd.getCreator(), cd.getGenre(), cd.getYear(), cd.getRuntime());
             } else if (selected instanceof Dvd dvd) {
-                manager.editOther(dvd, newTitle.get(), dvd.getCreator(), dvd.getGenre(), dvd.getYear(), dvd.getRuntime());
+                manager.editDVD(dvd, newTitle.get(), dvd.getCreator(), dvd.getGenre(), dvd.getYear(), dvd.getRuntime());
             }
             mediaListView.refresh();
         }
@@ -138,19 +138,6 @@ public class CollectionController {
         }
     }
 
-    //Ordner
-    @FXML
-    public void setFolderForSelected() {
-        Medium selected = mediaListView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            TextInputDialog dialog = new TextInputDialog(selected.getFolder());
-            dialog.setHeaderText("Ordner setzen");
-            dialog.setContentText("Ordnername:");
-            Optional<String> folderName = dialog.showAndWait();
-            folderName.ifPresent(name -> manager.setFolder(selected, name));
-            mediaListView.refresh();
-        }
-    }
 
 
     public void applyQuery(String q) {
