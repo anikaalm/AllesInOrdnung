@@ -9,7 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+
 
 import java.net.URL;
 import java.util.List;
@@ -18,10 +22,23 @@ import java.util.stream.Collectors;
 
 public class BooksController {
 
+    // ------------------- UI -------------------
     @FXML private ListView<Medium> booksList;
     @FXML private HeaderController headerController;
 
     private final CollectionManager manager;
+
+    // Dropdown-Werte (kannst du beliebig anpassen)
+    private static final List<String> GENRES = List.of(
+            "Roman",
+            "Sachbuch",
+            "Fantasy",
+            "Krimi",
+            "Biografie",
+            "Science Fiction",
+            "Kinderbuch",
+            "Sonstiges"
+    );
 
     public BooksController() {
         URL dataUrl = getClass().getResource("/data/collection.json");
@@ -33,6 +50,7 @@ public class BooksController {
     public void initialize() {
         loadBooks();
 
+        // nur Titel anzeigen
         booksList.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Medium item, boolean empty) {
@@ -41,10 +59,13 @@ public class BooksController {
             }
         });
 
+        // Header binden
         if (headerController != null) {
             headerController.setOnSearch(this::applySearch);
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setSearchPrompt("Suchen...");
+        } else {
+            System.out.println("WARN: headerController ist null in BooksController (prüfe fx:include fx:id=\"header\")");
         }
     }
 
@@ -65,27 +86,17 @@ public class BooksController {
         booksList.setItems(FXCollections.observableArrayList(filtered));
     }
 
-    // ------------------- Aktionen (JETZT WIE CollectionController) -------------------
+    // ------------------- Aktionen -------------------
 
     @FXML
     private void addBook() {
-        String title = askText("Titel", "Titel eingeben:");
-        if (title == null) return;
+        BookFormResult r = showBookFormDialog(
+                "Buch hinzufügen",
+                "", "", GENRES.get(0), "", ""
+        );
+        if (r == null) return;
 
-        String creator = askText("Autor", "Autor eingeben:");
-        if (creator == null) return;
-
-        String genre = askText("Genre", "Genre eingeben:");
-        if (genre == null) return;
-
-        Integer year = askInt("Jahr", "Jahr eingeben:");
-        if (year == null) return;
-
-        String publisher = askText("Verlag", "Verlag eingeben:");
-        if (publisher == null) return;
-
-        Book created = new Book(title, creator, genre, year, publisher);
-
+        Book created = new Book(r.title, r.creator, r.genre, r.year, r.publisher);
         manager.addMedium(created);
         loadBooks();
 
@@ -100,30 +111,122 @@ public class BooksController {
             showWarn("Kein Eintrag gewählt", "Bitte wähle zuerst ein Buch aus.");
             return;
         }
-
         if (!(selected instanceof Book book)) {
             showWarn("Falscher Typ", "Der ausgewählte Eintrag ist kein Buch.");
             return;
         }
 
-        String newTitle = askText("Titel bearbeiten", "Neuer Titel:", book.getTitle());
-        if (newTitle == null) return;
+        String presetGenre = (book.getGenre() != null && !book.getGenre().isBlank())
+                ? book.getGenre()
+                : GENRES.get(0);
 
-        String newCreator = askText("Autor", "Neu:", book.getCreator());
-        if (newCreator == null) return;
+        BookFormResult r = showBookFormDialog(
+                "Buch bearbeiten",
+                book.getTitle(),
+                book.getCreator(),
+                presetGenre,
+                String.valueOf(book.getYear()),
+                book.getPublisher()
+        );
+        if (r == null) return;
 
-        String newGenre = askText("Genre", "Neu:", book.getGenre());
-        if (newGenre == null) return;
-
-        Integer newYear = askInt("Jahr", "Neu:", book.getYear());
-        if (newYear == null) return;
-
-        String newPublisher = askText("Verlag", "Neu:", book.getPublisher());
-        if (newPublisher == null) return;
-
-        manager.editBook(book, newTitle, newCreator, newGenre, newYear, newPublisher);
-
+        manager.editBook(book, r.title, r.creator, r.genre, r.year, r.publisher);
         booksList.refresh();
+    }
+
+    // ------------------- Dialog: Formular mit Dropdown -------------------
+
+    private BookFormResult showBookFormDialog(
+            String title,
+            String presetTitle,
+            String presetCreator,
+            String presetGenre,
+            String presetYear,
+            String presetPublisher
+    ) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle(title);
+
+        ButtonType saveBtn = new ButtonType("Speichern", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField titleField = new TextField(presetTitle);
+        TextField creatorField = new TextField(presetCreator);
+        TextField yearField = new TextField(presetYear);
+        TextField publisherField = new TextField(presetPublisher);
+
+        ComboBox<String> genreBox = new ComboBox<>();
+        genreBox.getItems().addAll(GENRES);
+        // falls alter Genre-Wert nicht in Liste ist, trotzdem anzeigen
+        if (presetGenre != null && !presetGenre.isBlank() && !genreBox.getItems().contains(presetGenre)) {
+            genreBox.getItems().add(0, presetGenre);
+        }
+        genreBox.setValue((presetGenre == null || presetGenre.isBlank()) ? GENRES.get(0) : presetGenre);
+
+        grid.addRow(0, new Label("Titel:"), titleField);
+        grid.addRow(1, new Label("Autor:"), creatorField);
+        grid.addRow(2, new Label("Genre:"), genreBox);
+        grid.addRow(3, new Label("Jahr:"), yearField);
+        grid.addRow(4, new Label("Verlag:"), publisherField);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Validierung: Speichern nur wenn alles ok
+        Node saveButtonNode = dialog.getDialogPane().lookupButton(saveBtn);
+        saveButtonNode.addEventFilter(javafx.event.ActionEvent.ACTION, evt -> {
+            String t = titleField.getText() == null ? "" : titleField.getText().trim();
+            String c = creatorField.getText() == null ? "" : creatorField.getText().trim();
+            String g = genreBox.getValue() == null ? "" : genreBox.getValue().trim();
+            String y = yearField.getText() == null ? "" : yearField.getText().trim();
+            String p = publisherField.getText() == null ? "" : publisherField.getText().trim();
+
+            if (t.isBlank() || c.isBlank() || g.isBlank() || y.isBlank() || p.isBlank()) {
+                showWarn("Fehlende Eingaben", "Bitte fülle alle Felder aus.");
+                evt.consume();
+                return;
+            }
+
+            try {
+                Integer.parseInt(y);
+            } catch (NumberFormatException ex) {
+                showWarn("Ungültiges Jahr", "Bitte gib beim Jahr eine gültige Zahl ein.");
+                evt.consume();
+            }
+        });
+
+        Optional<ButtonType> res = dialog.showAndWait();
+        if (res.isEmpty() || res.get() != saveBtn) return null;
+
+        // sicher, weil Validierung vorher
+        int year = Integer.parseInt(yearField.getText().trim());
+
+        return new BookFormResult(
+                titleField.getText().trim(),
+                creatorField.getText().trim(),
+                genreBox.getValue().trim(),
+                year,
+                publisherField.getText().trim()
+        );
+    }
+
+    private static class BookFormResult {
+        final String title;
+        final String creator;
+        final String genre;
+        final int year;
+        final String publisher;
+
+        BookFormResult(String title, String creator, String genre, int year, String publisher) {
+            this.title = title;
+            this.creator = creator;
+            this.genre = genre;
+            this.year = year;
+            this.publisher = publisher;
+        }
     }
 
     // ------------------- Navigation -------------------
@@ -145,41 +248,7 @@ public class BooksController {
         }
     }
 
-    // ------------------- Dialog-Helfer (wie CollectionController) -------------------
-
-    private static String askText(String header, String content) {
-        TextInputDialog d = new TextInputDialog();
-        d.setHeaderText(header);
-        d.setContentText(content);
-        return d.showAndWait().map(String::trim).filter(s -> !s.isBlank()).orElse(null);
-    }
-
-    private static String askText(String header, String content, String preset) {
-        TextInputDialog d = new TextInputDialog(preset);
-        d.setHeaderText(header);
-        d.setContentText(content);
-        return d.showAndWait().map(String::trim).filter(s -> !s.isBlank()).orElse(null);
-    }
-
-    private static Integer askInt(String header, String content) {
-        TextInputDialog d = new TextInputDialog();
-        d.setHeaderText(header);
-        d.setContentText(content);
-        Optional<String> r = d.showAndWait();
-        if (r.isEmpty()) return null;
-        try { return Integer.parseInt(r.get().trim()); }
-        catch (NumberFormatException e) { showWarn("Ungültige Zahl", "Bitte gib eine gültige Zahl ein."); return null; }
-    }
-
-    private static Integer askInt(String header, String content, int preset) {
-        TextInputDialog d = new TextInputDialog(String.valueOf(preset));
-        d.setHeaderText(header);
-        d.setContentText(content);
-        Optional<String> r = d.showAndWait();
-        if (r.isEmpty()) return null;
-        try { return Integer.parseInt(r.get().trim()); }
-        catch (NumberFormatException e) { showWarn("Ungültige Zahl", "Bitte gib eine gültige Zahl ein."); return null; }
-    }
+    // ------------------- Helper -------------------
 
     private static void showWarn(String title, String msg) {
         Alert a = new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK);
