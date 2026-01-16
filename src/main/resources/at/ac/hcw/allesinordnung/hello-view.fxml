@@ -17,7 +17,7 @@
         <fx:include source="header.fxml"/>
     </top>
 
-    <!-- HAUPTINHALT -->
+    <!-- HAUPTINHALT-->
     <center>
         <VBox alignment="CENTER" spacing="20.0">
             <padding>
@@ -36,5 +36,4 @@
             </TableView>
         </VBox>
     </center>
-
 </BorderPane>

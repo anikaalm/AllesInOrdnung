@@ -6,6 +6,7 @@ module at.ac.hcw.allesinordnung {
 
     // Gson
     requires com.google.gson;
+    requires java.desktop;
 
     // JavaFX darf auf Controller zugreifen
     opens at.ac.hcw.allesinordnung.controller to javafx.fxml;

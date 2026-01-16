@@ -25,8 +25,8 @@
         </padding>
 
             <!-- Home Button -->
-            <Button text="🏠"
-                    onAction="#goToMenu"
+            <Button fx:id="homeButton"
+                    text="🏠"
                     styleClass="home-btn">
                 <tooltip>
                     <Tooltip text="Zurück zum Hauptmenü"/>
@@ -35,8 +35,12 @@
 
             <!-- Suchbereich -->
             <HBox spacing="8" alignment="CENTER_RIGHT">
-                <TextField fx:id="searchField" promptText="Suchen..." prefWidth="260"/>
-                <Button text="🔎" onAction="#onSearch" styleClass="icon-btn"/>
+                <TextField fx:id="searchField"
+                           promptText="Suchen..."
+                           prefWidth="260"/>
+                <Button fx:id="searchButton"
+                        text="🔎"
+                        styleClass="icon-btn"/>
             </HBox>
 
         </VBox>

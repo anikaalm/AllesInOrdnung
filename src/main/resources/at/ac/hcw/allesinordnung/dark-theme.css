@@ -96,3 +96,75 @@
     -fx-text-fill: white;
 }
 
+/* Pixel Titel */
+.title-large {
+    -fx-font-size: 56px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+}
+
+/* Untertitel */
+.title-medium {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Menüaktionen rechts */
+.menu-action {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-padding: 4 12;
+    -fx-border-color: transparent;
+}
+.menu-action:hover {
+    -fx-background-color: #111;
+}
+
+/* Bücherliste wie Story-Map */
+.story-list {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-control-inner-background: black;
+}
+.story-list .list-cell {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-padding: 8 4;
+}
+.story-list .list-cell:filled:selected {
+    -fx-background-color: #222;
+}
+
+.page-title { -fx-font-size: 36px; -fx-font-weight: bold; }
+.section-title { -fx-font-size: 18px; -fx-font-weight: bold; }
+.toggle-button:selected {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #ffffff;
+}
+
+.list-view {
+    -fx-control-inner-background: #1e1e1e;
+    -fx-text-fill: #ffffff;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+}
+
+.button {
+    -fx-background-color: #2b2b2b;
+    -fx-text-fill: #ffffff;
+}
+
+.label {
+    -fx-text-fill: #ffffff;
+}
+

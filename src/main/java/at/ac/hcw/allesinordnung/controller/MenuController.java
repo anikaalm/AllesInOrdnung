@@ -7,15 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class MenuController {
 
-    @FXML private TextField searchField;
 
-    // --- Navigation helpers --------------------------------------------------
-
+    // Gemeinsamer Loader für die Medienübersicht (main-view.fxml)
     private void gotoCollection(Node any, java.util.function.Consumer<CollectionController> afterLoad) {
         try {
             var url = getClass().getResource("/at/ac/hcw/allesinordnung/main-view.fxml");
@@ -25,13 +22,11 @@ public class MenuController {
             Parent root = loader.load();
             CollectionController controller = loader.getController();
 
-            // Optionale Nach-Initialisierung (Filter/Suche anwenden)
             if (afterLoad != null) afterLoad.accept(controller);
 
             Scene newScene = new Scene(root, 900, 650);
-            newScene.getStylesheets().add(
-                    getClass().getResource("/at/ac/hcw/allesinordnung/dark-theme.css").toExternalForm()
-            );
+            var css = getClass().getResource("/at/ac/hcw/allesinordnung/dark-theme.css");
+            if (css != null) newScene.getStylesheets().add(css.toExternalForm());
 
             Stage stage = (Stage) any.getScene().getWindow();
             stage.setScene(newScene);
@@ -44,11 +39,44 @@ public class MenuController {
         }
     }
 
-    // --- Menü-Aktionen -------------------------------------------------------
+    // ------------------------------------------------------------
+    // NEU: Direkter Loader für die Bücher-Seite (books-view.fxml)
+    // ------------------------------------------------------------
+    private void gotoBooks(Node any) {
+        try {
+            var url = getClass().getResource("/at/ac/hcw/allesinordnung/books-view.fxml");
+            if (url == null) throw new IllegalStateException("books-view.fxml nicht gefunden");
+
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
+
+            Scene newScene = new Scene(root, 900, 650);
+            var css = getClass().getResource("/at/ac/hcw/allesinordnung/dark-theme.css");
+            if (css != null) newScene.getStylesheets().add(css.toExternalForm());
+
+            Stage stage = (Stage) any.getScene().getWindow();
+            stage.setScene(newScene);
+            stage.setTitle("Bücher");
+            stage.show();
+
+            // Debug-Hinweis in der Konsole:
+            System.out.println("DEBUG: books-view.fxml wurde geladen");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Seitenwechsel (Bücher) fehlgeschlagen:\n" + ex.getMessage())
+                    .showAndWait();
+        }
+    }
+
+    // --------------------- Menü-Aktionen ------------------------
 
     @FXML
     private void openBooks(javafx.event.ActionEvent e) {
-        gotoCollection((Node) e.getSource(), CollectionController::showBooks);
+        // ALT (führt immer zur Medienübersicht):
+        // gotoCollection((Node) e.getSource(), CollectionController::showBooks);
+
+        // NEU (führt zur Bücher-Seite, wie in deinem Mockup):
+        gotoBooks((Node) e.getSource());
     }
 
     @FXML
@@ -68,14 +96,18 @@ public class MenuController {
 
     @FXML
     private void createFile(javafx.event.ActionEvent e) {
-        // TODO: Deinen Persistence-Workflow hier anstoßen
-        // Beispiel: JsonFileStorage.createEmptyIfMissing(...); danach openAll:
         gotoCollection((Node) e.getSource(), CollectionController::showAll);
     }
 
+    // Falls du eine Suche im Menü hast, die direkt in die Übersicht springen soll:
     @FXML
     private void onSearch(javafx.event.ActionEvent e) {
-        String q = searchField.getText();
-        gotoCollection((Node) e.getSource(), c -> c.applyQuery(q));
+        // Wenn die Suche im Menü bleiben und in die Übersicht leiten soll:
+        // String q = searchField.getText();
+        // gotoCollection((Node) e.getSource(), c -> c.applyQuery(q));
+
+        // Wenn die Suche für Bücher gelten soll, könntest du stattdessen gotoBooks(e) aufrufen
+        // und die Suche in BooksController verarbeiten (später).
+        gotoBooks((Node) e.getSource());
     }
 }

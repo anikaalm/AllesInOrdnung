@@ -104,25 +104,38 @@ public class CollectionController {
     //Bearbeiten
     @FXML
     public void editSelected() {
+        // 1) Auswahl holen
         Medium selected = mediaListView.getSelectionModel().getSelectedItem();
         if (selected == null) return;
 
+        // 2) Neuen Titel abfragen
         TextInputDialog dialog = new TextInputDialog(selected.getTitle());
         dialog.setHeaderText("Titel bearbeiten");
-        dialog.setContentText("Titel:");
-        Optional<String> newTitle = dialog.showAndWait();
+        dialog.setContentText("Neuer Titel:");
+        Optional<String> newTitleOpt = dialog.showAndWait();
 
-        if (newTitle.isPresent()) {
+        if (newTitleOpt.isPresent()) {
+            String title = newTitleOpt.get().trim();
+            if (title.isEmpty()) return;
+
+            // 3) Typ-spezifisch bearbeiten (ruft NUR den Manager!)
             if (selected instanceof Book book) {
-                manager.editBook(book, newTitle.get(), book.getCreator(), book.getGenre(), book.getYear(), book.getPublisher());
+                manager.editBook(book, title,
+                        book.getCreator(), book.getGenre(), book.getYear(), book.getPublisher());
             } else if (selected instanceof Cd cd) {
-                manager.editCD(cd, newTitle.get(), cd.getCreator(), cd.getGenre(), cd.getYear(), cd.getRuntime());
+                manager.editCd(cd, title,
+                        cd.getCreator(), cd.getGenre(), cd.getYear(), cd.getRuntime());
             } else if (selected instanceof Dvd dvd) {
-                manager.editDVD(dvd, newTitle.get(), dvd.getCreator(), dvd.getGenre(), dvd.getYear(), dvd.getRuntime());
+                manager.editDvd(dvd, title,
+                        dvd.getCreator(), dvd.getGenre(), dvd.getYear(), dvd.getRuntime());
             }
+
+            // 4) UI auffrischen
             mediaListView.refresh();
         }
     }
+
+
 
     //Löschen
     @FXML
@@ -145,6 +158,19 @@ public class CollectionController {
         }
     }
 
+    //Ordner
+    @FXML
+    public void setFolderForSelected() {
+        Medium selected = mediaListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            TextInputDialog dialog = new TextInputDialog(selected.getFolder());
+            dialog.setHeaderText("Ordner setzen");
+            dialog.setContentText("Ordnername:");
+            Optional<String> folderName = dialog.showAndWait();
+            folderName.ifPresent(name -> manager.setFolder(selected, name));
+            mediaListView.refresh();
+        }
+    }
 
 
     public void applyQuery(String q) {

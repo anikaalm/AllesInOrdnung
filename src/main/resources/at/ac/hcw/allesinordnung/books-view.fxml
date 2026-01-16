@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="at.ac.hcw.allesinordnung.controller.BooksController"
+            stylesheets="@dark-theme.css"
+            styleClass="root">
+
+    <!-- TOP: Header + Titel + Buttons -->
+    <top>
+        <VBox spacing="10">
+            <!-- Globaler Header -->
+            <fx:include source="header.fxml"/>
+
+            <!-- Titelzeile + Buttons -->
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="8" right="16" bottom="8" left="16"/>
+                </padding>
+
+                <!-- Großer Titel -->
+                <Label text="Bücher">
+                    <font>
+                        <Font size="36"/>
+                    </font>
+                </Label>
+
+                <!-- Dehnfuge -->
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <!-- Aktionsbuttons rechts -->
+                <Button text="➕ Hinzufügen" onAction="#addBook"/>
+                <Button text="✎ Bearbeiten" onAction="#editBook"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: Liste der Bücher -->
+    <center>
+        <ListView fx:id="booksList" prefHeight="500" prefWidth="800"/>
+    </center>
+
+    <!-- BOTTOM: leer oder optional Fußbereich -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="8" right="16" bottom="12" left="16"/>
+            </padding>
+            <!-- Optional weitere Buttons -->
+        </HBox>
+    </bottom>
+</BorderPane>
