@@ -7,6 +7,8 @@ import at.ac.hcw.allesinordnung.model.Cd;
 import at.ac.hcw.allesinordnung.model.Dvd;
 
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 
@@ -18,6 +20,11 @@ import java.util.Optional;
  */
 
 public class CollectionController {
+
+    @FXML
+    private void setFolderForSelected(ActionEvent event) {
+        System.out.println("Ordner setzen geklickt:");
+    }
 
     private CollectionManager manager = new CollectionManager("src/main/resources/data/collection.json");
 
