@@ -29,8 +29,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("at.ac.hcw.allesinordnung")
-    mainClass.set("at.ac.hcw.allesinordnung.HelloApplication") //  JavaFX Start
-    mainClass.set("at.ac.hcw.allesinordnung.demo.StorageDemo")
+    mainClass.set("at.ac.hcw.allesinordnung.controller.HelloApplication") //  JavaFX Start
 }
 
 javafx {
@@ -69,5 +68,18 @@ jlink {
 
     launcher {
         name = "app"
+    }
+
+    tasks.register<JavaExec>("runHelloApp") {
+        mainClass.set("at.ac.hcw.allesinordnung.controller.HelloApplication")
+        classpath = sourceSets["main"].runtimeClasspath
+
+        jvmArgs = listOf(
+            "--module-path",
+            "C:/Users/muham/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-controls/17.0.6/c95b460be3bc372060ff32d0c666c1233c3e8400/javafx-controls-17.0.6.jar;" +
+                    "C:/Users/muham/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-fxml/17.0.6/5724aedc415683e62eeab3a3875550aa814c84fd/javafx-fxml-17.0.6-win.jar",
+            "--add-modules", "javafx.controls,javafx.fxml"
+        )
+
     }
 }

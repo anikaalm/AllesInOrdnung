@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="at.ac.hcw.allesinordnung.controller.WelcomeController"
+           onMouseClicked="#handleStart"
+           stylesheets="@dark-theme.css"
+           styleClass="root">
+
+    <Label text="Willkommen :)"
+           style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+
+</StackPane>

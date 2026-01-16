@@ -2,15 +2,39 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.ac.hcw.allesinordnung.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.BorderPane?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="at.ac.hcw.allesinordnung.controller.HelloController">
+
+    <!-- HEADER (immer sichtbar) -->
+    <top>
+        <fx:include source="header.fxml"/>
+    </top>
+
+    <!-- HAUPTINHALT -->
+    <center>
+        <VBox alignment="CENTER" spacing="20.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+
+            <Label fx:id="welcomeText" text="Hello!"/>
+            <Button fx:id="helloButton" text="Load Media" onAction="#onHelloButtonClick"/>
+
+            <TableView fx:id="mediaTable" prefWidth="600" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="titleColumn" text="Titel" prefWidth="250"/>
+                    <TableColumn fx:id="creatorColumn" text="Autor/Künstler" prefWidth="200"/>
+                    <TableColumn fx:id="typeColumn" text="Typ" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>
