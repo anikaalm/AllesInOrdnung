@@ -67,11 +67,12 @@ public class CollectionManager {
     }
 
     //Bearbeiten
+
+    //EDIT: Buch
     public void editBook(Book book, String title, String creator, String genre, int year, String publisher) {
         if (book == null) {
             throw new IllegalArgumentException("Buch darf nicht null sein!");
         }
-
         if (!media.contains(book)) {
             throw new IllegalStateException("Buch nicht in der Sammlung gefunden");
         }
@@ -81,27 +82,41 @@ public class CollectionManager {
         book.setYear(year);
         book.setPublisher(publisher);
         storage.save(media);
-        System.out.println("Bearbeitung gespeichert");
+        System.out.println("Bearbeitung gespeichert (Buch)");
     }
 
-    public void editOther(Cd cd, String title, String creator, String genre, int year, int runtime) {
-        if (cd== null) {
-            throw new IllegalArgumentException(cd.getType() + " darf nicht null sein!");
+    //EDIT: CD
+    public void editCd(Cd cd, String title, String creator, String genre, int year, int runtime) {
+        if (cd == null) {
+            throw new IllegalArgumentException("CD darf nicht null sein!");
         }
-
         if (!media.contains(cd)) {
-            throw new IllegalStateException("Buch nicht in der Sammlung gefunden");
+            throw new IllegalStateException("CD nicht in der Sammlung gefunden");
         }
-
-
-
         cd.setTitle(title);
         cd.setCreator(creator);
         cd.setGenre(genre);
         cd.setYear(year);
         cd.setRuntime(runtime);
         storage.save(media);
-        System.out.println("Bearbeitung gespeichert");
+        System.out.println("Bearbeitung gespeichert (CD)");
+    }
+
+    //EDIT: DVD
+    public void editDvd(Dvd dvd, String title, String creator, String genre, int year, int runtime) {
+        if (dvd == null) {
+            throw new IllegalArgumentException("DVD darf nicht null sein!");
+        }
+        if (!media.contains(dvd)) {
+            throw new IllegalStateException("DVD nicht in der Sammlung gefunden");
+        }
+        dvd.setTitle(title);
+        dvd.setCreator(creator);   // bei dir heißt es 'creator' (Regisseur)
+        dvd.setGenre(genre);
+        dvd.setYear(year);
+        dvd.setRuntime(runtime);
+        storage.save(media);
+        System.out.println("Bearbeitung gespeichert (DVD)");
     }
 
     //Suchen

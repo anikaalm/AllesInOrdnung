@@ -1,41 +1,57 @@
 package at.ac.hcw.allesinordnung.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+
+import java.util.Objects;
+import java.util.function.Consumer;
 
 public class HeaderController {
 
+    @FXML private Button homeButton;
+    @FXML private Button searchButton;
+    @FXML private TextField searchField;
+
+    // Aktionen, die von außen gesetzt werden
+    private Runnable homeAction;          // Home-Button
+    private Consumer<String> onSearch;    // Suchaktion
+
     @FXML
-    private void goToMenu(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/at/ac/hcw/allesinordnung/menu-view.fxml")
-            );
+    private void initialize() {
+        // Home-Button klick
+        homeButton.setOnAction(e -> {
+            if (homeAction != null) homeAction.run();
+        });
 
-            Scene scene = new Scene(loader.load(), 900, 650);
-            scene.getStylesheets().add(
-                    getClass().getResource("/at/ac/hcw/allesinordnung/dark-theme.css")
-                            .toExternalForm()
-            );
+        // Such-Button klick
+        searchButton.setOnAction(e -> triggerSearch());
 
-            Stage stage = (Stage) ((Node) event.getSource())
-                    .getScene()
-                    .getWindow();
-
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Enter-Taste im Suchfeld
+        searchField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) triggerSearch();
+        });
     }
 
-    @FXML
-    private void onSearch() {
-        System.out.println("Suche gedrückt");
+    private void triggerSearch() {
+        if (onSearch != null) onSearch.accept(searchField.getText());
+    }
+
+    // ----- Methoden, die von außen aufgerufen werden -----
+    public void setHomeAction(Runnable r) {
+        this.homeAction = r;
+    }
+
+    public void setOnSearch(Consumer<String> c) {
+        this.onSearch = c;
+    }
+
+    public void setSearchPrompt(String prompt) {
+        if (searchField != null) searchField.setPromptText(prompt);
+    }
+
+    public String getSearchText() {
+        return searchField != null ? searchField.getText() : "";
     }
 }
