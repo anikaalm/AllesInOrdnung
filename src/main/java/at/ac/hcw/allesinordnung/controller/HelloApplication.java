@@ -15,9 +15,18 @@ public class HelloApplication extends Application {
                 getClass().getResource("/at/ac/hcw/allesinordnung/welcome-view.fxml")
         );
 
+
+
         Scene scene = new Scene(loader.load(), 600, 400);
 
-        stage.setTitle("Hello!");
+
+        // Dark Theme global für die erste Szene aktivieren
+        scene.getStylesheets().add(getClass()
+                .getResource("/at/ac/hcw/allesinordnung/dark-theme.css")
+                .toExternalForm());
+
+
+        stage.setTitle("Alles in Ordnung");
         stage.setScene(scene);
         stage.show();
     }

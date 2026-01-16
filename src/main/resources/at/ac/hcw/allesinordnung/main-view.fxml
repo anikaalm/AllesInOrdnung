@@ -1,15 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.ac.hcw.allesinordnung.controller.HelloController">
+            fx:controller="at.ac.hcw.allesinordnung.controller.CollectionController"
+            stylesheets="@dark-theme.css"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+
+            <Label text="Medienübersicht"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+
+                <Button text="Alle"   onAction="#showAll"/>
+                <Button text="Bücher" onAction="#showBooks"/>
+                <Button text="CDs"    onAction="#showCds"/>
+                <Button text="DVDs"   onAction="#showDvds"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Button text="Titel"
+                        onAction="#searchByTitle"/>
+                <Button text="Autor/Künstler"
+                        onAction="#searchByCreator"/>
+                <Button text="Jahr"
+                        onAction="#searchByYear"/>
+                <Button text="Genre"
+                        onAction="#searchByGenre"/>
+
+            </HBox>
+        </VBox>
+    </top>
 
     <center>
-        <Label text="Hauptansicht – Medienübersicht"
-               style="-fx-font-size: 18px;" />
+        <ListView fx:id="mediaListView"/>
     </center>
+
+    <bottom>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Button text="✎ Ändern"
+                    onAction="#editSelected"/>
+            <Button text="🗑 Löschen"
+                    onAction="#deleteSelected"/>
+            <Button text="★ Favorit"
+                    onAction="#toggleFavorite"/>
+            <Button text="Ordner setzen"
+                    onAction="#setFolderForSelected"/>
+
+        </HBox>
+    </bottom>
 
 </BorderPane>

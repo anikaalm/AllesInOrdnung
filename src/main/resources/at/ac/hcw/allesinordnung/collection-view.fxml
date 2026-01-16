@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="at.ac.hcw.allesinordnung.controller.CollectionController"
+      spacing="20.0" alignment="CENTER" prefWidth="600.0" prefHeight="400.0">
+
+    <!-- Titel -->
+    <Label text="Alles in Ordnung - Medienübersicht" style="-fx-font-size: 20px;"/>
+
+    <!-- Kategorie Buttons -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Bücher" onAction="#showBooks"/>
+        <Button text="CDs" onAction="#showCds"/>
+        <Button text="DVDs" onAction="#showDvds"/>
+        <Button text="Alle" onAction="#showAll"/>
+    </HBox>
+
+    <!-- Suchbereich -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Suche:"/>
+        <Button text="Titel" onAction="#searchByTitle"/>
+        <Button text="Autor / Künstler" onAction="#searchByCreator"/>
+        <Button text="Jahr" onAction="#searchByYear"/>
+        <Button text="Genre" onAction="#searchByGenre"/>
+    </HBox>
+
+    <!-- Medien-Liste -->
+    <ListView fx:id="mediaListView" prefHeight="250.0" prefWidth="500.0"/>
+
+    <!-- Aktionen für ausgewähltes Medium -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Bearbeiten" onAction="#editSelected"/>
+        <Button text="Löschen" onAction="#deleteSelected"/>
+        <Button text="Favorit setzen" onAction="#toggleFavorite"/>
+    </HBox>
+
+    // Ordner- und Favoriten-Buttons
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Bearbeiten" onAction="#editSelected"/>
+        <Button text="Löschen" onAction="#deleteSelected"/>
+        <Button text="Favorit setzen/entfernen" onAction="#toggleFavorite"/>
+        <Button text="Ordner setzen" onAction="#setFolderForSelected"/>
+    </HBox>
+
+</VBox>
+
