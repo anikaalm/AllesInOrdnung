@@ -1,6 +1,5 @@
 [
   {
-    "type": "CD",
     "runtime": 48,
     "title": "21",
     "creator": "Adele",
@@ -8,10 +7,10 @@
     "year": 2011,
     "favorite": false,
     "rating": 0,
-    "folder": "Pop"
+    "folder": "Pop",
+    "type": "CD"
   },
   {
-    "type": "BOOK",
     "publisher": "Reclam",
     "title": "Faust",
     "creator": "Goethe",
@@ -19,10 +18,10 @@
     "year": 2000,
     "favorite": true,
     "rating": 5,
-    "folder": "Klassiker"
+    "folder": "Klassiker",
+    "type": "BOOK"
   },
   {
-    "type": "BOOK",
     "publisher": "Pan Macmillan",
     "title": "Before the coffee gets cold",
     "creator": "Toshikazu Kawaguchi",
@@ -30,10 +29,10 @@
     "year": 2015,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "BOOK"
   },
   {
-    "type": "CD",
     "runtime": 48,
     "title": "25",
     "creator": "Adele",
@@ -41,10 +40,10 @@
     "year": 2015,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "CD"
   },
   {
-    "type": "CD",
     "runtime": 52,
     "title": "33",
     "creator": "KJ",
@@ -52,10 +51,10 @@
     "year": 2011,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "CD"
   },
   {
-    "type": "CD",
     "runtime": 50,
     "title": "was geht",
     "creator": "alles",
@@ -63,6 +62,128 @@
     "year": 2000,
     "favorite": false,
     "rating": 0,
-    "folder": ""
+    "folder": "",
+    "type": "CD"
+  },
+  {
+    "runtime": 42,
+    "title": "Thriller",
+    "creator": "Michael Jacksons",
+    "genre": "Pop",
+    "year": 1982,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "CD"
+  },
+  {
+    "runtime": 42,
+    "title": "Back in Black",
+    "creator": "AC/DC",
+    "genre": "Rock",
+    "year": 1980,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "CD"
+  },
+  {
+    "runtime": 47,
+    "title": "Random Access Memories",
+    "creator": "Daft Puft",
+    "genre": "Electronic",
+    "year": 2013,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "CD"
+  },
+  {
+    "publisher": "Reynal \u0026 Hitchcock",
+    "title": "Der Kleine Prinz",
+    "creator": "Antoine de Saint-Exupery",
+    "genre": "Klassik",
+    "year": 1943,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "BOOK"
+  },
+  {
+    "publisher": "Carlsen",
+    "title": "Harry Potter und der Stein der Weisen",
+    "creator": "J.K. Rowling",
+    "genre": "Fantasy",
+    "year": 1997,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "BOOK"
+  },
+  {
+    "publisher": "Secker \u0026 Warburg",
+    "title": "1984",
+    "creator": "George Orwell",
+    "genre": "Dystopie",
+    "year": 1949,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "BOOK"
+  },
+  {
+    "publisher": "Kurt Wolff Verlag",
+    "title": "Die Verwandlung",
+    "creator": "Franz Kafka",
+    "genre": "Klassik",
+    "year": 1915,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "BOOK"
+  },
+  {
+    "runtime": 88,
+    "title": "Der König der Löwen",
+    "creator": "Disney",
+    "genre": "Animation",
+    "year": 1994,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "DVD"
+  },
+  {
+    "runtime": 148,
+    "title": "Inception",
+    "creator": " Warner Bros.",
+    "genre": "Sci-Fi",
+    "year": 2010,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "DVD"
+  },
+  {
+    "runtime": 142,
+    "title": "Forrest Gump",
+    "creator": "Paramount Pictures",
+    "genre": "Drama",
+    "year": 1994,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "DVD"
+  },
+  {
+    "runtime": 120,
+    "title": "Crazy Rich Asian",
+    "creator": "Warner Bros",
+    "genre": "Romantik/Komödie",
+    "year": 2018,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "DVD"
   }
 ]

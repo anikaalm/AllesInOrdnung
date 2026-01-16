@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 /**
  * CollectionManager verwaltet alle Medien in einer polymorphen Liste
  * und speichert Änderungen automatisch in JSON.
@@ -22,35 +21,60 @@ public class CollectionManager {
 
     //Constructor
     public CollectionManager(String filePath) {
+        if (filePath == null || filePath.trim().isEmpty() ) {
+            throw new IllegalArgumentException("Dateipfad darf nicht null oder leer sein!");
+        }
         this.storage = new JsonFileStorage(filePath);
         this.media = storage.load(); // beim Start alle Medien laden
     }
 
     //Anzeigen
     public List<Medium> showAllMedia() {
+        if (media.isEmpty()) {
+            System.out.println("Die Sammlung ist noch leer :(");
+        }
         return new ArrayList<>(media); // Kopie zurückgeben
     }
 
     //Hinzufügen
     public void addMedium(Medium m) {
+
+        if (m== null){
+            throw new IllegalArgumentException("Medium darf nicht null sein!");
+        }
         boolean exists = media.stream().anyMatch(x -> x.equals(m));
         if(exists){
-            System.out.println(m.getType() + " bereits in der Sammlung vorhanden");
+            throw new IllegalStateException(m.getType() + " bereits in der Sammlung vorhanden !");
+
         } else {
             media.add(m);
             storage.save(media);
+            System.out.println(m.getType() + ": " + m.getTitle() + "wurde hinzugefügt :)" );
         }
     }
 
     //Löschen
     public void deleteMedium(Medium m) {
+        if (m== null){
+            throw new IllegalArgumentException("Medium darf nicht null sein!");
+        }
+        if (!media.contains(m)) {
+            throw new IllegalStateException(m.getType() + ": " + m.getTitle() + "nicht in der Sammlung gefunden");
+        }
         media.remove(m);
         storage.save(media);
-        System.out.println(m.getType() + " wurde entfernt");
+        System.out.println(m.getType() +": "+ m.getTitle() + " wurde entfernt");
     }
 
     //Bearbeiten
     public void editBook(Book book, String title, String creator, String genre, int year, String publisher) {
+        if (book == null) {
+            throw new IllegalArgumentException("Buch darf nicht null sein!");
+        }
+
+        if (!media.contains(book)) {
+            throw new IllegalStateException("Buch nicht in der Sammlung gefunden");
+        }
         book.setTitle(title);
         book.setCreator(creator);
         book.setGenre(genre);
@@ -60,15 +84,22 @@ public class CollectionManager {
         System.out.println("Bearbeitung gespeichert");
     }
 
-    public void editOther(Medium medium, String title, String creator, String genre, int year, int runtime) {
-        medium.setTitle(title);
-        medium.setCreator(creator);
-        medium.setGenre(genre);
-        medium.setYear(year);
+    public void editOther(Cd cd, String title, String creator, String genre, int year, int runtime) {
+        if (cd== null) {
+            throw new IllegalArgumentException(cd.getType() + " darf nicht null sein!");
+        }
 
-        if(medium instanceof Cd) ((Cd) medium).setRuntime(runtime);
-        if(medium instanceof Dvd) ((Dvd) medium).setRuntime(runtime);
+        if (!media.contains(cd)) {
+            throw new IllegalStateException("Buch nicht in der Sammlung gefunden");
+        }
 
+
+
+        cd.setTitle(title);
+        cd.setCreator(creator);
+        cd.setGenre(genre);
+        cd.setYear(year);
+        cd.setRuntime(runtime);
         storage.save(media);
         System.out.println("Bearbeitung gespeichert");
     }

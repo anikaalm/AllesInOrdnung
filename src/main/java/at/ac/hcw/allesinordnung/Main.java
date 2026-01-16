@@ -16,14 +16,24 @@ public class Main {
 
             //Buch
             Medium b1 = new Book("Faust", "Goethe", "Klassik", 2000, "Reclam");
-            Medium b2 = new Book("Before the coffee gets cold", "Toshikazu Kawaguchi", "fantasy", 2015, "Pan Macmillan");
+            Medium b2 = new Book("Before the coffee gets cold", "Toshikazu Kawaguchi", "Fantasy", 2015, "Pan Macmillan");
+            Medium b3 = new Book ("Der Kleine Prinz", "Antoine de Saint-Exupery", "Klassik", 1943, "Reynal & Hitchcock" );
+            Medium b4 = new Book ("Harry Potter und der Stein der Weisen", "J.K. Rowling", "Fantasy",1997, "Carlsen");
+            Medium b5 = new Book ("1984", "George Orwell", "Dystopie",1949, "Secker & Warburg");
+            Medium b6 = new Book ("Die Verwandlung", "Franz Kafka", "Klassik",1915, "Kurt Wolff Verlag");
+
+
             //CD
             Medium c1 = new Cd("21", "Adele", "Pop", 2011, 48);
-            Medium c2 = new Cd("25", "Adele", "Pop", 2015, 48);
-            Medium c3 = new Cd("33", "KJ", "Rap", 2011, 52);
-            Medium c4 = new Cd("was geht", "alles", "Jazz", 2000, 50);
+            Medium c2 = new Cd("Thriller", "Michael Jacksons", "Pop", 1982, 42);
+            Medium c3 = new Cd("Back in Black", "AC/DC", "Rock", 1980, 42);
+            Medium c4 = new Cd("Random Access Memories", "Daft Puft", "Electronic", 2013, 47);
             //DVD
             Medium d1 = new Dvd("Das Barbie Tagebuch", "Universal Pictures", "Zeichentrick", 2006, 70);
+            Medium d2 = new Dvd("Der König der Löwen", "Disney", "Animation", 1994, 88);
+            Medium d3 = new Dvd("Inception", " Warner Bros.", "Sci-Fi", 2010, 148);
+            Medium d4 = new Dvd("Forrest Gump", "Paramount Pictures", "Drama", 1994, 142);
+            Medium d5 = new Dvd ("Crazy Rich Asian", "Warner Bros", "Romantik/Komödie", 2018, 120);
 
 
             manager.addMedium(c1);
@@ -34,6 +44,14 @@ public class Main {
             manager.addMedium(c3);
             manager.addMedium(c4);
             manager.addMedium(d1);
+            manager.addMedium(b3);
+            manager.addMedium(b4);
+            manager.addMedium(b5);
+            manager.addMedium(b6);
+            manager.addMedium(d2);
+            manager.addMedium(d3);
+            manager.addMedium(d4);
+            manager.addMedium(d5);
 
             // Ausgabe aller Medien
             manager.showAllMedia().forEach(m ->
