@@ -6,19 +6,24 @@ import at.ac.hcw.allesinordnung.model.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 
+import javafx.event.ActionEvent;
+
 public class CollectionController {
 
     @FXML private ListView<Medium> mediaListView;
     @FXML private HeaderController headerController;
+    @FXML private ComboBox<String> typeFilterBox; // falls du die Filter-ComboBox eingebaut hast
 
     private final CollectionManager manager;
 
@@ -30,10 +35,8 @@ public class CollectionController {
 
     @FXML
     public void initialize() {
-        // initial laden
         showAll();
 
-        // ListView nur Titel
         mediaListView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Medium item, boolean empty) {
@@ -42,68 +45,43 @@ public class CollectionController {
             }
         });
 
-        // Header anbinden (Home + Search)
+        // Filter ComboBox (optional)
+        if (typeFilterBox != null) {
+            typeFilterBox.setItems(FXCollections.observableArrayList("Alle", "Bücher", "CDs", "DVDs"));
+            typeFilterBox.setValue("Alle");
+            typeFilterBox.valueProperty().addListener((obs, o, n) -> refreshByCurrentFilter());
+        }
+
         if (headerController != null) {
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setOnSearch(this::applyQuery);
             headerController.setSearchPrompt("Suchen...");
-        } else {
-            System.out.println("WARN: headerController ist null in CollectionController");
         }
     }
 
-    // ------------------- TOP Buttons (wie Books) -------------------
+    // ------------------- EIN Dialog fürs Hinzufügen -------------------
 
     @FXML
     private void addMedium() {
-        ChoiceDialog<String> typeDialog = new ChoiceDialog<>("BOOK", "BOOK", "CD", "DVD");
-        typeDialog.setHeaderText("Medium hinzufügen");
-        typeDialog.setContentText("Typ auswählen:");
+        MediumFormResult r = showMediumFormDialog(
+                "Medium hinzufügen",
+                "BOOK",
+                "", "", "", "",
+                "", "" // publisher, runtime
+        );
+        if (r == null) return;
 
-        Optional<String> typeOpt = typeDialog.showAndWait();
-        if (typeOpt.isEmpty()) return;
-
-        String type = typeOpt.get();
-
-        String title = askText("Titel", "Titel eingeben:");
-        if (title == null) return;
-
-        String creator = askText("Autor/Künstler", "Name eingeben:");
-        if (creator == null) return;
-
-        String genre = askText("Genre", "Genre eingeben:");
-        if (genre == null) return;
-
-        Integer year = askInt("Jahr", "Jahr eingeben:");
-        if (year == null) return;
-
-        Medium created = null;
-
-        if ("BOOK".equals(type)) {
-            String publisher = askText("Verlag", "Verlag eingeben:");
-            if (publisher == null) return;
-            created = new Book(title, creator, genre, year, publisher);
-
-        } else if ("CD".equals(type)) {
-            Integer runtime = askInt("Laufzeit", "Laufzeit (Minuten) eingeben:");
-            if (runtime == null) return;
-            created = new Cd(title, creator, genre, year, runtime);
-
-        } else if ("DVD".equals(type)) {
-            Integer runtime = askInt("Laufzeit", "Laufzeit (Minuten) eingeben:");
-            if (runtime == null) return;
-            created = new Dvd(title, creator, genre, year, runtime);
-        }
-
+        Medium created = buildMediumFromForm(r);
         if (created == null) return;
 
         manager.addMedium(created);
-        showAll();
+        refreshByCurrentFilter();
 
-        // optional: neu eingefügtes Element auswählen
         mediaListView.getSelectionModel().select(created);
         mediaListView.scrollTo(created);
     }
+
+    // ------------------- EIN Dialog fürs Bearbeiten -------------------
 
     @FXML
     public void editSelected() {
@@ -113,40 +91,208 @@ public class CollectionController {
             return;
         }
 
-        // gemeinsame Felder
-        String newTitle = askText("Titel bearbeiten", "Neuer Titel:", selected.getTitle());
-        if (newTitle == null) return;
+        String presetType = selected.getType(); // "BOOK" / "CD" / "DVD"
+        String presetPublisher = "";
+        String presetRuntime = "";
 
-        String newCreator = askText("Autor/Künstler", "Neu:", selected.getCreator());
-        if (newCreator == null) return;
+        if (selected instanceof Book b) presetPublisher = b.getPublisher();
+        if (selected instanceof Cd c) presetRuntime = String.valueOf(c.getRuntime());
+        if (selected instanceof Dvd d) presetRuntime = String.valueOf(d.getRuntime());
 
-        String newGenre = askText("Genre", "Neu:", selected.getGenre());
-        if (newGenre == null) return;
+        MediumFormResult r = showMediumFormDialog(
+                "Medium bearbeiten",
+                presetType,
+                selected.getTitle(),
+                selected.getCreator(),
+                selected.getGenre(),
+                String.valueOf(selected.getYear()),
+                presetPublisher,
+                presetRuntime
+        );
+        if (r == null) return;
 
-        Integer newYear = askInt("Jahr", "Neu:", selected.getYear());
-        if (newYear == null) return;
-
-        // typ-spezifisch
+        // jetzt typ-spezifisch speichern
         if (selected instanceof Book book) {
-            String publisher = askText("Verlag", "Neu:", book.getPublisher());
-            if (publisher == null) return;
-            manager.editBook(book, newTitle, newCreator, newGenre, newYear, publisher);
-
+            manager.editBook(book, r.title, r.creator, r.genre, r.year, r.publisher);
         } else if (selected instanceof Cd cd) {
-            Integer runtime = askInt("Laufzeit", "Neu (Minuten):", cd.getRuntime());
-            if (runtime == null) return;
-            manager.editCd(cd, newTitle, newCreator, newGenre, newYear, runtime);
-
+            manager.editCd(cd, r.title, r.creator, r.genre, r.year, r.runtime);
         } else if (selected instanceof Dvd dvd) {
-            Integer runtime = askInt("Laufzeit", "Neu (Minuten):", dvd.getRuntime());
-            if (runtime == null) return;
-            manager.editDvd(dvd, newTitle, newCreator, newGenre, newYear, runtime);
+            manager.editDvd(dvd, r.title, r.creator, r.genre, r.year, r.runtime);
         }
 
         mediaListView.refresh();
     }
 
-    // ------------------- Laden/Filter (kannst du behalten) -------------------
+    // ------------------- Dialog-Bau (alles in einem Fenster) -------------------
+
+    private MediumFormResult showMediumFormDialog(
+            String dialogTitle,
+            String presetType,
+            String presetTitle,
+            String presetCreator,
+            String presetGenre,
+            String presetYear,
+            String presetPublisher,
+            String presetRuntime
+    ) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle(dialogTitle);
+
+        ButtonType saveBtn = new ButtonType("Speichern", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Typ Dropdown
+        ComboBox<String> typeBox = new ComboBox<>();
+        typeBox.getItems().addAll("BOOK", "CD", "DVD");
+        typeBox.setValue(presetType == null || presetType.isBlank() ? "BOOK" : presetType);
+
+        TextField titleField = new TextField(presetTitle);
+        TextField creatorField = new TextField(presetCreator);
+        TextField genreField = new TextField(presetGenre);
+        TextField yearField = new TextField(presetYear);
+
+        // Typ-spezifisch
+        Label publisherLabel = new Label("Verlag:");
+        TextField publisherField = new TextField(presetPublisher);
+
+        Label runtimeLabel = new Label("Laufzeit (Min):");
+        TextField runtimeField = new TextField(presetRuntime);
+
+        grid.addRow(0, new Label("Typ:"), typeBox);
+        grid.addRow(1, new Label("Titel:"), titleField);
+        grid.addRow(2, new Label("Autor/Künstler:"), creatorField);
+        grid.addRow(3, new Label("Genre:"), genreField);
+        grid.addRow(4, new Label("Jahr:"), yearField);
+
+        // Zeile 5 wird dynamisch (Verlag ODER Laufzeit)
+        // wir legen beide an und blenden um
+        grid.addRow(5, publisherLabel, publisherField);
+        grid.addRow(6, runtimeLabel, runtimeField);
+
+        Runnable updateTypeFields = () -> {
+            String t = typeBox.getValue();
+            boolean isBook = "BOOK".equals(t);
+
+            publisherLabel.setManaged(isBook);
+            publisherLabel.setVisible(isBook);
+            publisherField.setManaged(isBook);
+            publisherField.setVisible(isBook);
+
+            runtimeLabel.setManaged(!isBook);
+            runtimeLabel.setVisible(!isBook);
+            runtimeField.setManaged(!isBook);
+            runtimeField.setVisible(!isBook);
+        };
+
+        updateTypeFields.run();
+        typeBox.valueProperty().addListener((obs, oldV, newV) -> updateTypeFields.run());
+
+        dialog.getDialogPane().setContent(grid);
+
+        Node saveButtonNode = dialog.getDialogPane().lookupButton(saveBtn);
+        saveButtonNode.addEventFilter(ActionEvent.ACTION, (ActionEvent evt) -> {
+            String t = safeTrim(typeBox.getValue());
+            String title = safeTrim(titleField.getText());
+            String creator = safeTrim(creatorField.getText());
+            String genre = safeTrim(genreField.getText());
+            String yearStr = safeTrim(yearField.getText());
+            String publisher = safeTrim(publisherField.getText());
+            String runtimeStr = safeTrim(runtimeField.getText());
+
+            if (title.isBlank() || creator.isBlank() || genre.isBlank() || yearStr.isBlank()) {
+                showWarn("Fehlende Eingaben", "Bitte fülle Titel, Autor/Künstler, Genre und Jahr aus.");
+                evt.consume();
+                return;
+            }
+
+            int year;
+            try {
+                year = Integer.parseInt(yearStr);
+            } catch (NumberFormatException ex) {
+                showWarn("Ungültiges Jahr", "Bitte gib beim Jahr eine gültige Zahl ein.");
+                evt.consume();
+                return;
+            }
+
+            if ("BOOK".equals(t)) {
+                if (publisher.isBlank()) {
+                    showWarn("Fehlende Eingaben", "Bitte gib einen Verlag ein.");
+                    evt.consume();
+                }
+            } else { // CD / DVD
+                if (runtimeStr.isBlank()) {
+                    showWarn("Fehlende Eingaben", "Bitte gib eine Laufzeit ein.");
+                    evt.consume();
+                    return;
+                }
+                try {
+                    Integer.parseInt(runtimeStr);
+                } catch (NumberFormatException ex) {
+                    showWarn("Ungültige Laufzeit", "Bitte gib bei Laufzeit eine gültige Zahl ein.");
+                    evt.consume();
+                }
+            }
+        });
+
+        Optional<ButtonType> res = dialog.showAndWait();
+        if (res.isEmpty() || res.get() != saveBtn) return null;
+
+        // Ergebnis bauen
+        String t = safeTrim(typeBox.getValue());
+        int year = Integer.parseInt(yearField.getText().trim());
+
+        int runtime = 0;
+        if (!"BOOK".equals(t)) runtime = Integer.parseInt(runtimeField.getText().trim());
+
+        return new MediumFormResult(
+                t,
+                titleField.getText().trim(),
+                creatorField.getText().trim(),
+                genreField.getText().trim(),
+                year,
+                publisherField.getText().trim(),
+                runtime
+        );
+    }
+
+    private Medium buildMediumFromForm(MediumFormResult r) {
+        return switch (r.type) {
+            case "BOOK" -> new Book(r.title, r.creator, r.genre, r.year, r.publisher);
+            case "CD" -> new Cd(r.title, r.creator, r.genre, r.year, r.runtime);
+            case "DVD" -> new Dvd(r.title, r.creator, r.genre, r.year, r.runtime);
+            default -> null;
+        };
+    }
+
+    private static class MediumFormResult {
+        final String type;
+        final String title;
+        final String creator;
+        final String genre;
+        final int year;
+        final String publisher;
+        final int runtime;
+
+        MediumFormResult(String type, String title, String creator, String genre, int year, String publisher, int runtime) {
+            this.type = type;
+            this.title = title;
+            this.creator = creator;
+            this.genre = genre;
+            this.year = year;
+            this.publisher = publisher;
+            this.runtime = runtime;
+        }
+    }
+
+    private static String safeTrim(String s) {
+        return s == null ? "" : s.trim();
+    }
+
+    // ------------------- Filter / Suche -------------------
 
     @FXML
     public void showAll() {
@@ -168,9 +314,21 @@ public class CollectionController {
         mediaListView.setItems(FXCollections.observableArrayList(manager.filterByType("DVD")));
     }
 
-    // Header-Suche
+    private void refreshByCurrentFilter() {
+        if (typeFilterBox == null || typeFilterBox.getValue() == null) {
+            showAll();
+            return;
+        }
+        switch (typeFilterBox.getValue()) {
+            case "Bücher" -> showBooks();
+            case "CDs" -> showCds();
+            case "DVDs" -> showDvds();
+            default -> showAll();
+        }
+    }
+
     public void applyQuery(String q) {
-        if (q == null || q.isBlank()) { showAll(); return; }
+        if (q == null || q.isBlank()) { refreshByCurrentFilter(); return; }
 
         LinkedHashSet<Medium> set = new LinkedHashSet<>();
         set.addAll(manager.searchByTitle(q));
@@ -203,41 +361,13 @@ public class CollectionController {
         }
     }
 
-    // ------------------- Dialog-Helfer -------------------
+    // ------------------- Placeholder für deine Buttons -------------------
 
-    private static String askText(String header, String content) {
-        TextInputDialog d = new TextInputDialog();
-        d.setHeaderText(header);
-        d.setContentText(content);
-        return d.showAndWait().map(String::trim).filter(s -> !s.isBlank()).orElse(null);
-    }
+    @FXML private void deleteSelected() { showWarn("TODO", "deleteSelected() ist noch nicht implementiert."); }
+    @FXML private void toggleFavorite() { showWarn("TODO", "toggleFavorite() ist noch nicht implementiert."); }
+    @FXML private void setFolderForSelected() { showWarn("TODO", "setFolderForSelected() ist noch nicht implementiert."); }
 
-    private static String askText(String header, String content, String preset) {
-        TextInputDialog d = new TextInputDialog(preset);
-        d.setHeaderText(header);
-        d.setContentText(content);
-        return d.showAndWait().map(String::trim).filter(s -> !s.isBlank()).orElse(null);
-    }
-
-    private static Integer askInt(String header, String content) {
-        TextInputDialog d = new TextInputDialog();
-        d.setHeaderText(header);
-        d.setContentText(content);
-        Optional<String> r = d.showAndWait();
-        if (r.isEmpty()) return null;
-        try { return Integer.parseInt(r.get().trim()); }
-        catch (NumberFormatException e) { showWarn("Ungültige Zahl", "Bitte gib eine gültige Zahl ein."); return null; }
-    }
-
-    private static Integer askInt(String header, String content, int preset) {
-        TextInputDialog d = new TextInputDialog(String.valueOf(preset));
-        d.setHeaderText(header);
-        d.setContentText(content);
-        Optional<String> r = d.showAndWait();
-        if (r.isEmpty()) return null;
-        try { return Integer.parseInt(r.get().trim()); }
-        catch (NumberFormatException e) { showWarn("Ungültige Zahl", "Bitte gib eine gültige Zahl ein."); return null; }
-    }
+    // ------------------- Warn -------------------
 
     private static void showWarn(String title, String msg) {
         Alert a = new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK);
