@@ -79,12 +79,26 @@ public class BooksController {
             loadBooks();
             return;
         }
-        String q = query.toLowerCase();
+
+        String q = query.trim().toLowerCase();
+
         List<Medium> filtered = manager.filterByType("BOOK").stream()
-                .filter(m -> m.getTitle().toLowerCase().contains(q))
+                .filter(m ->
+                        containsIgnoreCase(m.getTitle(), q)
+                                || containsIgnoreCase(m.getCreator(), q)
+                                || containsIgnoreCase(m.getGenre(), q)
+                                || (m instanceof Book b && containsIgnoreCase(b.getPublisher(), q))
+                                || String.valueOf(m.getYear()).contains(q)
+                )
                 .collect(Collectors.toList());
+
         booksList.setItems(FXCollections.observableArrayList(filtered));
     }
+
+    private boolean containsIgnoreCase(String value, String q) {
+        return value != null && value.toLowerCase().contains(q);
+    }
+
 
     // ------------------- Aktionen -------------------
 
