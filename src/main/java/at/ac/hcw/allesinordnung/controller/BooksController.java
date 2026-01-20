@@ -67,12 +67,11 @@ public class BooksController {
 
         // Header binden
         if (headerController != null) {
+            headerController.setTitle("PicassoCollective");
             headerController.setOnSearch(this::applySearch);
             headerController.setHomeAction(this::goHomeFromHeader);
-            headerController.setSearchPrompt("Suchen...");
-        } else {
-            System.out.println("WARN: headerController ist null in BooksController (prüfe fx:include fx:id=\"header\")");
         }
+
     }
 
     private void loadBooks() {

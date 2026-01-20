@@ -58,10 +58,11 @@ public class CollectionController {
         }
 
         if (headerController != null) {
+            headerController.setTitle("PicassoCollective");
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setOnSearch(this::applyQuery);
-            headerController.setSearchPrompt("Suchen...");
         }
+
     }
 
     // ------------------- EIN Dialog fürs Hinzufügen -------------------
