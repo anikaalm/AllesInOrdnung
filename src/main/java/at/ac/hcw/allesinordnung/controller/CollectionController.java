@@ -28,10 +28,15 @@ public class CollectionController {
     private final CollectionManager manager;
 
     public CollectionController() {
-        URL dataUrl = getClass().getResource("/data/collection.json");
-        String path = (dataUrl != null) ? dataUrl.getPath() : "src/main/resources/data/collection.json";
+        String path = java.nio.file.Paths.get(
+                System.getProperty("user.home"),
+                "allesinordnung",
+                "collection.json"
+        ).toString();
+
         this.manager = new CollectionManager(path);
     }
+
 
     @FXML
     public void initialize() {
@@ -49,8 +54,8 @@ public class CollectionController {
             headerController.setTitle("PicassoCollective");
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setOnSearch(this::applyQuery);
-            headerController.setSearchPrompt("Suchen...");
         }
+
     }
 
 

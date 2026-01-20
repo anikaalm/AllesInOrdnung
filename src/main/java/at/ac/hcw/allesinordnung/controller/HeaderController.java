@@ -50,6 +50,12 @@ public class HeaderController {
         }
     }
 
+    public void setTitle(String text) {
+        if (titleLabel != null) {
+            titleLabel.setText(text);
+        }
+    }
+
     public void setOnSearch(Consumer<String> c) {
         this.onSearch = c;
     }
