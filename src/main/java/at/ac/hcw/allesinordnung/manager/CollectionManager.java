@@ -167,42 +167,6 @@ public class CollectionManager {
         media.sort(Comparator.comparingInt(Medium::getYear));
     }
 
-    //Favoriten / Bewertung
-    public List<Medium> getFavorites() {
-        return media.stream()
-                .filter(Medium::isFavorite)
-                .toList();
-    }
-
-    public void setFavorite(Medium medium, boolean favorite) {
-        for (Medium m : media) {
-            if (m.equals(medium)) {
-                m.setFavorite(favorite);   // ← WICHTIG: m, nicht medium
-                storage.save(media);
-                return;
-            }
-        }
-    }
-
-
-
-    public void rateMedium(Medium m, int rating) {
-        m.setRating(rating);
-        storage.save(media);
-    }
-
-
-    //Ordner / Gruppierung
-    public void setFolder(Medium m, String folder) {
-        m.setFolder(folder);
-        storage.save(media);
-    }
-
-    public List<Medium> filterByFolder(String folder) {
-        return media.stream()
-                .filter(m -> m.getFolder().equalsIgnoreCase(folder))
-                .collect(Collectors.toList());
-    }
 
     //Getter
     public List<Medium> getAllMedia() {
