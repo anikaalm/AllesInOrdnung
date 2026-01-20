@@ -168,3 +168,8 @@
     -fx-text-fill: #ffffff;
 }
 
+
+/* dark-theme.css oder ein eigenes CSS */
+.list-cell {
+    -fx-padding: 6 10 6 10;
+}

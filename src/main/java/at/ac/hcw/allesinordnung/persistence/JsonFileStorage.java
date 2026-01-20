@@ -47,18 +47,20 @@ public class JsonFileStorage {
         }
     }
 
-    /** Laden in UTF‑8; leere/korrupten Dateiinhalt robust behandeln */
+
+    // JsonFileStorage.load()
     public List<Medium> load() {
+        System.out.println(">> [Storage] load(): " + file.getAbsolutePath()
+                + " exists=" + file.exists() + " size=" + file.length());
         if (!file.exists() || file.length() == 0) {
             return new ArrayList<>();
         }
         try (Reader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-
             Type listType = new com.google.gson.reflect.TypeToken<List<Medium>>() {}.getType();
             List<Medium> list = gson.fromJson(reader, listType);
+            System.out.println(">> [Storage] parsed count=" + (list == null ? 0 : list.size()));
             return (list != null) ? list : new ArrayList<>();
-
         } catch (Exception e) {
             System.err.println("Fehler beim Laden (JSON ungültig/leer?): " + e.getMessage());
             return new ArrayList<>();

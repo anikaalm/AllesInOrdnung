@@ -11,13 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
 import at.ac.hcw.allesinordnung.util.AppContext;
 
-
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,36 +42,38 @@ public class BooksController {
 
     public BooksController() {}
 
+
     @FXML
     public void initialize() {
-
-        System.out.println(">> [Books] initialize() aufgerufen");
-        System.out.println(">> [Books] booksList ist " + (booksList == null ? "NULL" : "NICHT NULL"));
-
         this.manager = AppContext.getManager();
+        var books = manager.filterByType("BOOK");
+        booksList.setItems(FXCollections.observableArrayList(books));
 
-        System.out.println(">> [Books] Manager da. total=" + manager.showAllMedia().size());
 
-        loadBooks();
-
-        // nur Titel anzeigen
-        booksList.setCellFactory(lv -> new ListCell<>() {
+        // ➜ Ab hier: Nur Titel anzeigen
+        booksList.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Medium item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item.getTitle());
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getTitle()); // nur der Titel
+                }
             }
         });
 
-        // Header binden
+        // 🔗 WICHTIG: Home-Button im Header mit dieser View verknüpfen
         if (headerController != null) {
-            headerController.setOnSearch(this::applySearch);
             headerController.setHomeAction(this::goHomeFromHeader);
-            headerController.setSearchPrompt("Suchen...");
         } else {
-            System.out.println("WARN: headerController ist null in BooksController (prüfe fx:include fx:id=\"header\")");
+            System.out.println("[Books] headerController ist null – prüfe <fx:include fx:id=\"header\" ...> und module-info.");
         }
     }
+
+
+
+
 
     private void loadBooks() {
         List<Medium> onlyBooks = manager.filterByType("BOOK");

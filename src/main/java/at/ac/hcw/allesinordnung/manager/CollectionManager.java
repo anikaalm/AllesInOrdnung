@@ -5,6 +5,8 @@ import at.ac.hcw.allesinordnung.model.Cd;
 import at.ac.hcw.allesinordnung.model.Dvd;
 import at.ac.hcw.allesinordnung.model.Medium;
 import at.ac.hcw.allesinordnung.persistence.JsonFileStorage;
+
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -36,39 +38,30 @@ public class CollectionManager {
      * Legt Ordner/Datei an (falls nötig) und lädt die Daten.
      */
 
+
     public void initStorage() {
         try {
-            Path p = Path.of(storage.getFilePath()); // Falls JsonFileStorage keinen Getter hat: füge ihn hinzu
+            Path p = Path.of(storage.getFilePath());
             Path parent = p.getParent();
-            if (parent != null) Files.createDirectories(parent);
-
-
-            if (Files.notExists(p)) {
-                // 1) Versuche Default aus resources zu kopieren
-                try (var in = getClass().getResourceAsStream("/data/collection.json")) {
-                    if (in != null) {
-                        Files.copy(in, p);
-                        System.out.println("Default-collection.json aus resources übernommen -> " + p);
-                    } else {
-                        // 2) Falls keine Default vorhanden: leere Datei anlegen
-                        Files.createFile(p);
-                        Files.writeString(p, "[]", java.nio.charset.StandardCharsets.UTF_8);
-                        System.out.println("Leere collection.json angelegt -> " + p);
-                    }
-                }
+            if (parent != null) {
+                Files.createDirectories(parent);
             }
 
-
-
-            // Erst jetzt laden:
+            if (Files.notExists(p)) {
+                Files.createFile(p);
+                Files.writeString(p, "[]", StandardCharsets.UTF_8);
+                System.out.println(">> collection.json neu erstellt: " + p);
+            }
+            // Laden
             List<Medium> loaded = storage.load();
             media.clear();
             if (loaded != null) media.addAll(loaded);
 
         } catch (Exception e) {
-            throw new RuntimeException("Konnte Speicherordner/Datei nicht vorbereiten: " + storage.getFilePath(), e);
+            throw new RuntimeException("Konnte Datei nicht vorbereiten: " + storage.getFilePath(), e);
         }
     }
+
 
 
     //Anzeigen
