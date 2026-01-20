@@ -11,9 +11,11 @@
 
     <!-- LINKS: Titel -->
     <left>
-        <Label text="Willkommen :)"
+        <Label fx:id="titleLabel"
+               text="Willkommen :)"
                styleClass="welcome-title"
                BorderPane.alignment="CENTER_LEFT"/>
+
     </left>
 
     <!-- RECHTS: DEIN CODE -->

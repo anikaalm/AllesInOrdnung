@@ -2,6 +2,7 @@ package at.ac.hcw.allesinordnung.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
@@ -11,6 +12,7 @@ import java.util.function.Consumer;
 public class HeaderController {
 
     @FXML private Button homeButton;
+    @FXML private Label titleLabel;
     @FXML private Button searchButton;
     @FXML private TextField searchField;
 
@@ -41,6 +43,11 @@ public class HeaderController {
     // ----- Methoden, die von außen aufgerufen werden -----
     public void setHomeAction(Runnable r) {
         this.homeAction = r;
+    }
+    public void setTitle(String text) {
+        if (titleLabel != null) {
+            titleLabel.setText(text);
+        }
     }
 
     public void setOnSearch(Consumer<String> c) {

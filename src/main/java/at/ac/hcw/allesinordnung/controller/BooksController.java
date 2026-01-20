@@ -59,8 +59,8 @@ public class BooksController {
             }
         });
 
-        // Header binden
         if (headerController != null) {
+            headerController.setTitle("PicassoCollective");
             headerController.setOnSearch(this::applySearch);
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setSearchPrompt("Suchen...");

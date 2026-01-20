@@ -45,19 +45,14 @@ public class CollectionController {
             }
         });
 
-        // Filter ComboBox (optional)
-        if (typeFilterBox != null) {
-            typeFilterBox.setItems(FXCollections.observableArrayList("Alle", "Bücher", "CDs", "DVDs"));
-            typeFilterBox.setValue("Alle");
-            typeFilterBox.valueProperty().addListener((obs, o, n) -> refreshByCurrentFilter());
-        }
-
         if (headerController != null) {
+            headerController.setTitle("PicassoCollective");
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setOnSearch(this::applyQuery);
             headerController.setSearchPrompt("Suchen...");
         }
     }
+
 
     // ------------------- EIN Dialog fürs Hinzufügen -------------------
 
