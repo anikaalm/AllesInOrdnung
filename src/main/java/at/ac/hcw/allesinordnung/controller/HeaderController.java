@@ -44,6 +44,11 @@ public class HeaderController {
     public void setHomeAction(Runnable r) {
         this.homeAction = r;
     }
+    public void setTitle(String text) {
+        if (titleLabel != null) {
+            titleLabel.setText(text);
+        }
+    }
 
     public void setTitle(String text) {
         if (titleLabel != null) {

@@ -50,13 +50,6 @@ public class CollectionController {
             }
         });
 
-        // Filter ComboBox (optional)
-        if (typeFilterBox != null) {
-            typeFilterBox.setItems(FXCollections.observableArrayList("Alle", "Bücher", "CDs", "DVDs"));
-            typeFilterBox.setValue("Alle");
-            typeFilterBox.valueProperty().addListener((obs, o, n) -> refreshByCurrentFilter());
-        }
-
         if (headerController != null) {
             headerController.setTitle("PicassoCollective");
             headerController.setHomeAction(this::goHomeFromHeader);
@@ -64,6 +57,7 @@ public class CollectionController {
         }
 
     }
+
 
     // ------------------- EIN Dialog fürs Hinzufügen -------------------
 
