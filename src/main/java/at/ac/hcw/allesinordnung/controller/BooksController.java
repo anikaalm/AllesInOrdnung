@@ -71,8 +71,14 @@ public class BooksController {
 
     private void loadBooks() {
         List<Medium> onlyBooks = manager.filterByType("BOOK");
+
+        onlyBooks.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
         booksList.setItems(FXCollections.observableArrayList(onlyBooks));
     }
+
 
     private void applySearch(String query) {
         if (query == null || query.isBlank()) {
@@ -91,6 +97,10 @@ public class BooksController {
                                 || String.valueOf(m.getYear()).contains(q)
                 )
                 .collect(Collectors.toList());
+
+        filtered.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
 
         booksList.setItems(FXCollections.observableArrayList(filtered));
     }

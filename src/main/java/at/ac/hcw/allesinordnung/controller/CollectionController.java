@@ -296,23 +296,50 @@ public class CollectionController {
 
     @FXML
     public void showAll() {
-        mediaListView.setItems(FXCollections.observableArrayList(manager.showAllMedia()));
+        var list = manager.showAllMedia();
+
+        list.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
+        mediaListView.setItems(FXCollections.observableArrayList(list));
     }
 
     @FXML
     public void showBooks() {
-        mediaListView.setItems(FXCollections.observableArrayList(manager.filterByType("BOOK")));
+        var list = manager.filterByType("BOOK");
+
+        list.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
+        mediaListView.setItems(FXCollections.observableArrayList(list));
     }
+
 
     @FXML
     public void showCds() {
-        mediaListView.setItems(FXCollections.observableArrayList(manager.filterByType("CD")));
+        var list = manager.filterByType("CD");
+
+        list.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
+        mediaListView.setItems(FXCollections.observableArrayList(list));
     }
+
 
     @FXML
     public void showDvds() {
-        mediaListView.setItems(FXCollections.observableArrayList(manager.filterByType("DVD")));
+        var list = manager.filterByType("DVD");
+
+        list.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
+        mediaListView.setItems(FXCollections.observableArrayList(list));
     }
+
 
     private void refreshByCurrentFilter() {
         if (typeFilterBox == null || typeFilterBox.getValue() == null) {
@@ -327,20 +354,33 @@ public class CollectionController {
         }
     }
 
+
     public void applyQuery(String q) {
-        if (q == null || q.isBlank()) { refreshByCurrentFilter(); return; }
+        if (q == null || q.isBlank()) {
+            refreshByCurrentFilter();
+            return;
+        }
 
         LinkedHashSet<Medium> set = new LinkedHashSet<>();
         set.addAll(manager.searchByTitle(q));
         set.addAll(manager.searchByCreator(q));
+
         try {
             int year = Integer.parseInt(q.trim());
             set.addAll(manager.searchByYear(year));
         } catch (NumberFormatException ignore) {}
+
         set.addAll(manager.searchByGenre(q));
 
-        mediaListView.setItems(FXCollections.observableArrayList(set));
+        var list = new java.util.ArrayList<>(set);
+
+        list.sort(
+                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
+        );
+
+        mediaListView.setItems(FXCollections.observableArrayList(list));
     }
+
 
     // ------------------- Navigation -------------------
 
