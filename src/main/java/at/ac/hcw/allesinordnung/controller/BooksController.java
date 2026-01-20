@@ -41,10 +41,16 @@ public class BooksController {
     );
 
     public BooksController() {
-        URL dataUrl = getClass().getResource("/data/collection.json");
-        String path = (dataUrl != null) ? dataUrl.getPath() : "src/main/resources/data/collection.json";
+        String path = java.nio.file.Paths.get(
+                System.getProperty("user.home"),
+                "allesinordnung",
+                "collection.json"
+        ).toString();
+
         this.manager = new CollectionManager(path);
     }
+
+
 
     @FXML
     public void initialize() {

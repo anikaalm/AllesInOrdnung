@@ -24,6 +24,14 @@ public class CollectionManager {
         if (filePath == null || filePath.trim().isEmpty() ) {
             throw new IllegalArgumentException("Dateipfad darf nicht null oder leer sein!");
         }
+        try {
+            var p = java.nio.file.Paths.get(filePath);
+            var parent = p.getParent();
+            if (parent != null) java.nio.file.Files.createDirectories(parent);
+        } catch (Exception e) {
+            throw new RuntimeException("Konnte Speicherordner nicht erstellen: " + filePath, e);
+        }
+
         this.storage = new JsonFileStorage(filePath);
         this.media = storage.load(); // beim Start alle Medien laden
     }
