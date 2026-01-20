@@ -1,5 +1,4 @@
-
-package at.ac.hcw.allesinordnung.controller;
+/*package at.ac.hcw.allesinordnung.controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,3 +36,4 @@ public class HelloApplication extends Application {
     }
 
 }
+*/

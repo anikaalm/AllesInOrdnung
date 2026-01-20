@@ -5,7 +5,8 @@ import at.ac.hcw.allesinordnung.model.Cd;
 import at.ac.hcw.allesinordnung.model.Dvd;
 import at.ac.hcw.allesinordnung.model.Medium;
 import at.ac.hcw.allesinordnung.persistence.JsonFileStorage;
-
+import java.nio.file.Path;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -20,21 +21,55 @@ public class CollectionManager {
     private final List<Medium> media;
 
     //Constructor
+
+    /** Neuer, leichter Konstruktor: kein I/O */
     public CollectionManager(String filePath) {
-        if (filePath == null || filePath.trim().isEmpty() ) {
+        if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("Dateipfad darf nicht null oder leer sein!");
         }
-        try {
-            var p = java.nio.file.Paths.get(filePath);
-            var parent = p.getParent();
-            if (parent != null) java.nio.file.Files.createDirectories(parent);
-        } catch (Exception e) {
-            throw new RuntimeException("Konnte Speicherordner nicht erstellen: " + filePath, e);
-        }
-
         this.storage = new JsonFileStorage(filePath);
-        this.media = storage.load(); // beim Start alle Medien laden
+        this.media = new ArrayList<>(); // noch NICHT laden – erst in initStorage()
     }
+
+    /**
+     * Diese Methode darf I/O machen und wird EXPLIZIT nach dem Erzeugen aufgerufen.
+     * Legt Ordner/Datei an (falls nötig) und lädt die Daten.
+     */
+
+    public void initStorage() {
+        try {
+            Path p = Path.of(storage.getFilePath()); // Falls JsonFileStorage keinen Getter hat: füge ihn hinzu
+            Path parent = p.getParent();
+            if (parent != null) Files.createDirectories(parent);
+
+
+            if (Files.notExists(p)) {
+                // 1) Versuche Default aus resources zu kopieren
+                try (var in = getClass().getResourceAsStream("/data/collection.json")) {
+                    if (in != null) {
+                        Files.copy(in, p);
+                        System.out.println("Default-collection.json aus resources übernommen -> " + p);
+                    } else {
+                        // 2) Falls keine Default vorhanden: leere Datei anlegen
+                        Files.createFile(p);
+                        Files.writeString(p, "[]", java.nio.charset.StandardCharsets.UTF_8);
+                        System.out.println("Leere collection.json angelegt -> " + p);
+                    }
+                }
+            }
+
+
+
+            // Erst jetzt laden:
+            List<Medium> loaded = storage.load();
+            media.clear();
+            if (loaded != null) media.addAll(loaded);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Konnte Speicherordner/Datei nicht vorbereiten: " + storage.getFilePath(), e);
+        }
+    }
+
 
     //Anzeigen
     public List<Medium> showAllMedia() {

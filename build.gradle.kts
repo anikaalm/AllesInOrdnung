@@ -29,8 +29,9 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("at.ac.hcw.allesinordnung")
-    mainClass.set("at.ac.hcw.allesinordnung.controller.HelloApplication") //  JavaFX Start
+    mainClass.set("at.ac.hcw.allesinordnung.App")
 }
+
 
 javafx {
     version = "17.0.6"

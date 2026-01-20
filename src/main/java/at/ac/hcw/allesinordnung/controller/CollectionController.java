@@ -19,47 +19,62 @@ import java.util.Optional;
 
 import javafx.event.ActionEvent;
 
+import at.ac.hcw.allesinordnung.util.AppPaths;
+
 public class CollectionController {
 
     @FXML private ListView<Medium> mediaListView;
     @FXML private HeaderController headerController;
     @FXML private ComboBox<String> typeFilterBox; // falls du die Filter-ComboBox eingebaut hast
 
-    private final CollectionManager manager;
+    private CollectionManager manager;
+
 
     public CollectionController() {
-        String path = java.nio.file.Paths.get(
-                System.getProperty("user.home"),
-                "allesinordnung",
-                "collection.json"
-        ).toString();
-
-        this.manager = new CollectionManager(path);
+        // WICHTIG: Kein I/O, kein getResource(), kein Manager hier!
     }
-
 
     @FXML
     public void initialize() {
+        // 1) Benutzerbezogener Pfad (z. B. C:\Users\<Name>\AllesInOrdnung\data\collection.json)
+        String filePath = AppPaths.collectionFile().toString();
+
+        // 2) Manager leicht erzeugen (Konstruktor macht keinen I/O)
+        this.manager = new CollectionManager(filePath);
+
+        // 3) Jetzt erst I/O: Ordner/Datei anlegen + Daten laden
+        this.manager.initStorage();
+
+        // 4) UI befüllen
         showAll();
 
+        // 5) ListCell-Rendering
         mediaListView.setCellFactory(lv -> new ListCell<>() {
             @Override
+
             protected void updateItem(Medium item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? "" : item.getTitle());
             }
         });
 
-        if (headerController != null) {
-            headerController.setTitle("PicassoCollective");
-            headerController.setHomeAction(this::goHomeFromHeader);
-            headerController.setOnSearch(this::applyQuery);
+        // 6) Optionaler Filter
+        if (typeFilterBox != null) {
+            typeFilterBox.setItems(FXCollections.observableArrayList("Alle", "Bücher", "CDs", "DVDs"));
+            typeFilterBox.setValue("Alle");
+            typeFilterBox.valueProperty().addListener((obs, o, n) -> refreshByCurrentFilter());
         }
 
+        // 7) Header-Callbacks
+        if (headerController != null) {
+            headerController.setHomeAction(this::goHomeFromHeader);
+            headerController.setOnSearch(this::applyQuery);
+            headerController.setSearchPrompt("Suchen...");
+        }
     }
 
 
-    // ------------------- EIN Dialog fürs Hinzufügen -------------------
+        // ------------------- EIN Dialog fürs Hinzufügen -------------------
 
     @FXML
     private void addMedium() {

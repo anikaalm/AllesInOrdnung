@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
+import at.ac.hcw.allesinordnung.util.AppContext;
+
 
 import java.net.URL;
 import java.util.List;
@@ -22,11 +24,12 @@ import java.util.stream.Collectors;
 
 public class BooksController {
 
+
     // ------------------- UI -------------------
     @FXML private ListView<Medium> booksList;
     @FXML private HeaderController headerController;
 
-    private final CollectionManager manager;
+    private CollectionManager manager;
 
     // Dropdown-Werte (kannst du beliebig anpassen)
     private static final List<String> GENRES = List.of(
@@ -40,20 +43,18 @@ public class BooksController {
             "Sonstiges"
     );
 
-    public BooksController() {
-        String path = java.nio.file.Paths.get(
-                System.getProperty("user.home"),
-                "allesinordnung",
-                "collection.json"
-        ).toString();
-
-        this.manager = new CollectionManager(path);
-    }
-
-
+    public BooksController() {}
 
     @FXML
     public void initialize() {
+
+        System.out.println(">> [Books] initialize() aufgerufen");
+        System.out.println(">> [Books] booksList ist " + (booksList == null ? "NULL" : "NICHT NULL"));
+
+        this.manager = AppContext.getManager();
+
+        System.out.println(">> [Books] Manager da. total=" + manager.showAllMedia().size());
+
         loadBooks();
 
         // nur Titel anzeigen
@@ -65,12 +66,14 @@ public class BooksController {
             }
         });
 
+        // Header binden
         if (headerController != null) {
-            headerController.setTitle("PicassoCollective");
             headerController.setOnSearch(this::applySearch);
             headerController.setHomeAction(this::goHomeFromHeader);
+            headerController.setSearchPrompt("Suchen...");
+        } else {
+            System.out.println("WARN: headerController ist null in BooksController (prüfe fx:include fx:id=\"header\")");
         }
-
     }
 
     private void loadBooks() {

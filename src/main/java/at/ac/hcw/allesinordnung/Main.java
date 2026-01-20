@@ -1,6 +1,6 @@
 package at.ac.hcw.allesinordnung;
 
-import at.ac.hcw.allesinordnung.controller.HelloApplication;
+import at.ac.hcw.allesinordnung.App;
 import at.ac.hcw.allesinordnung.manager.CollectionManager;
 import at.ac.hcw.allesinordnung.model.Book;
 import at.ac.hcw.allesinordnung.model.Cd;
@@ -10,7 +10,7 @@ import at.ac.hcw.allesinordnung.model.Medium;
 public class Main {
     public static void main(String[] args) {
 
-        HelloApplication.main(args);
+        App.main(args);
 
             // hier die GUI starten
 

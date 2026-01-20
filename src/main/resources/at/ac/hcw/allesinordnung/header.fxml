@@ -11,20 +11,18 @@
 
     <!-- LINKS: Titel -->
     <left>
-        <Label fx:id="titleLabel"
-               text="Willkommen :)"
+        <Label text="Willkommen :)"
                styleClass="welcome-title"
                BorderPane.alignment="CENTER_LEFT"/>
-
     </left>
 
     <!-- RECHTS: DEIN CODE -->
     <right>
         <VBox spacing="6"
               alignment="TOP_RIGHT">
-        <padding>
-            <Insets top="16" right="16" bottom="16" left="16"/>
-        </padding>
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
 
             <!-- Home Button -->
             <Button fx:id="homeButton"
