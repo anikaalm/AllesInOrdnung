@@ -3,7 +3,10 @@ package at.ac.hcw.allesinordnung.controller;
 import at.ac.hcw.allesinordnung.manager.CollectionManager;
 import at.ac.hcw.allesinordnung.model.*;
 
+import at.ac.hcw.allesinordnung.util.AppPaths;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,68 +16,89 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
-
-import at.ac.hcw.allesinordnung.util.AppPaths;
 
 public class CollectionController {
 
     @FXML private ListView<Medium> mediaListView;
     @FXML private HeaderController headerController;
-    @FXML private ComboBox<String> typeFilterBox; // falls du die Filter-ComboBox eingebaut hast
+    @FXML private ComboBox<String> typeFilterBox;
 
     private CollectionManager manager;
 
+    // ✅ Eine einzige ObservableList als "Single Source of Truth" für die ListView
+    private final ObservableList<Medium> uiItems = FXCollections.observableArrayList();
+
+    // ✅ Merkt sich, was gerade angezeigt wird
+    private enum Filter { ALL, BOOK, CD, DVD }
+    private enum ViewMode { FILTER, SEARCH }
+
+    private Filter currentFilter = Filter.ALL;
+    private ViewMode currentMode = ViewMode.FILTER;
+    private String lastQuery = "";
+
+    // verhindert doppeltes Triggern, wenn wir ComboBox-Wert programmatisch setzen
+    private boolean programmaticFilterChange = false;
 
     public CollectionController() {
-        // WICHTIG: Kein I/O, kein getResource(), kein Manager hier!
+        // Kein I/O hier
     }
 
     @FXML
     public void initialize() {
-        // 1) Benutzerbezogener Pfad (z. B. C:\Users\<Name>\AllesInOrdnung\data\collection.json)
         String filePath = AppPaths.collectionFile().toString();
-
-        // 2) Manager leicht erzeugen (Konstruktor macht keinen I/O)
         this.manager = new CollectionManager(filePath);
-
-        // 3) Jetzt erst I/O: Ordner/Datei anlegen + Daten laden
         this.manager.initStorage();
 
-        // 4) UI befüllen
-        showAll();
+        // ListView an ObservableList binden
+        mediaListView.setItems(uiItems);
 
-        // 5) ListCell-Rendering
+        // Rendering
         mediaListView.setCellFactory(lv -> new ListCell<>() {
             @Override
-
             protected void updateItem(Medium item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? "" : item.getTitle());
             }
         });
 
-        // 6) Optionaler Filter
+        // Filter-ComboBox
         if (typeFilterBox != null) {
             typeFilterBox.setItems(FXCollections.observableArrayList("Alle", "Bücher", "CDs", "DVDs"));
-            typeFilterBox.setValue("Alle");
-            typeFilterBox.valueProperty().addListener((obs, o, n) -> refreshByCurrentFilter());
+
+            // Startzustand
+            setFilterUIValue("Alle");
+            currentFilter = Filter.ALL;
+            currentMode = ViewMode.FILTER;
+
+            typeFilterBox.valueProperty().addListener((obs, oldV, newV) -> {
+                if (programmaticFilterChange) return;
+
+                currentMode = ViewMode.FILTER;
+                lastQuery = "";
+
+                if ("Bücher".equals(newV)) currentFilter = Filter.BOOK;
+                else if ("CDs".equals(newV)) currentFilter = Filter.CD;
+                else if ("DVDs".equals(newV)) currentFilter = Filter.DVD;
+                else currentFilter = Filter.ALL;
+
+                refreshCurrentView();
+            });
         }
 
-        // 7) Header-Callbacks
+        // Header-Callbacks
         if (headerController != null) {
             headerController.setHomeAction(this::goHomeFromHeader);
             headerController.setOnSearch(this::applyQuery);
             headerController.setSearchPrompt("Suchen...");
         }
+
+        // Initial befüllen
+        refreshCurrentView();
     }
 
-
-        // ------------------- EIN Dialog fürs Hinzufügen -------------------
+    // ------------------- Add -------------------
 
     @FXML
     private void addMedium() {
@@ -82,7 +106,7 @@ public class CollectionController {
                 "Medium hinzufügen",
                 "BOOK",
                 "", "", "", "",
-                "", "" // publisher, runtime
+                "", ""
         );
         if (r == null) return;
 
@@ -90,13 +114,16 @@ public class CollectionController {
         if (created == null) return;
 
         manager.addMedium(created);
-        refreshByCurrentFilter();
 
+        // Nach dem Hinzufügen im aktuellen View bleiben
+        refreshCurrentView();
+
+        // versuchen neu hinzugefügtes Element zu selektieren (klappt v.a. im "Alle"-View)
         mediaListView.getSelectionModel().select(created);
         mediaListView.scrollTo(created);
     }
 
-    // ------------------- EIN Dialog fürs Bearbeiten -------------------
+    // ------------------- Edit -------------------
 
     @FXML
     public void editSelected() {
@@ -126,7 +153,6 @@ public class CollectionController {
         );
         if (r == null) return;
 
-        // jetzt typ-spezifisch speichern
         if (selected instanceof Book book) {
             manager.editBook(book, r.title, r.creator, r.genre, r.year, r.publisher);
         } else if (selected instanceof Cd cd) {
@@ -135,10 +161,137 @@ public class CollectionController {
             manager.editDvd(dvd, r.title, r.creator, r.genre, r.year, r.runtime);
         }
 
-        mediaListView.refresh();
+        // View bleibt, Daten neu ziehen
+        refreshCurrentView();
     }
 
-    // ------------------- Dialog-Bau (alles in einem Fenster) -------------------
+    // ------------------- Delete -------------------
+
+    // FXML Buttons rufen bei dir meist deleteSelected() auf
+    @FXML
+    private void deleteSelected() {
+        Medium selected = mediaListView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showWarn("Kein Eintrag gewählt", "Bitte wähle zuerst ein Medium aus.");
+            return;
+        }
+
+        // optional: Bestätigung
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Willst du \"" + selected.getTitle() + "\" wirklich löschen?",
+                ButtonType.YES, ButtonType.NO);
+        confirm.setHeaderText("Löschen bestätigen");
+        Optional<ButtonType> res = confirm.showAndWait();
+        if (res.isEmpty() || res.get() != ButtonType.YES) return;
+
+        manager.deleteMedium(selected); // Model + JSON
+        // UI bleibt im aktuellen Filter/Suchzustand
+        refreshCurrentView();
+    }
+
+    // Falls du irgendwo onAction="#deleteMedium" hattest: Alias
+    @FXML
+    public void deleteMedium() {
+        deleteSelected();
+    }
+
+    // ------------------- Filter / Suche -------------------
+
+    @FXML
+    public void showAll() {
+        currentMode = ViewMode.FILTER;
+        currentFilter = Filter.ALL;
+        lastQuery = "";
+        setFilterUIValue("Alle");
+        refreshCurrentView();
+    }
+
+    @FXML
+    public void showBooks() {
+        currentMode = ViewMode.FILTER;
+        currentFilter = Filter.BOOK;
+        lastQuery = "";
+        setFilterUIValue("Bücher");
+        refreshCurrentView();
+    }
+
+    @FXML
+    public void showCds() {
+        currentMode = ViewMode.FILTER;
+        currentFilter = Filter.CD;
+        lastQuery = "";
+        setFilterUIValue("CDs");
+        refreshCurrentView();
+    }
+
+    @FXML
+    public void showDvds() {
+        currentMode = ViewMode.FILTER;
+        currentFilter = Filter.DVD;
+        lastQuery = "";
+        setFilterUIValue("DVDs");
+        refreshCurrentView();
+    }
+
+    public void applyQuery(String q) {
+        q = (q == null) ? "" : q.trim();
+
+        if (q.isBlank()) {
+            currentMode = ViewMode.FILTER;
+            lastQuery = "";
+            refreshCurrentView();
+            return;
+        }
+
+        currentMode = ViewMode.SEARCH;
+        lastQuery = q;
+
+        LinkedHashSet<Medium> set = new LinkedHashSet<>();
+        set.addAll(manager.searchByTitle(q));
+        set.addAll(manager.searchByCreator(q));
+
+        try {
+            int year = Integer.parseInt(q);
+            set.addAll(manager.searchByYear(year));
+        } catch (NumberFormatException ignore) {}
+
+        set.addAll(manager.searchByGenre(q));
+
+        var list = new java.util.ArrayList<>(set);
+        list.sort((a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle()));
+
+        uiItems.setAll(list);
+    }
+
+    private void refreshCurrentView() {
+        if (currentMode == ViewMode.SEARCH && lastQuery != null && !lastQuery.isBlank()) {
+            applyQuery(lastQuery);
+            return;
+        }
+
+        java.util.List<Medium> list;
+        switch (currentFilter) {
+            case BOOK -> list = manager.filterByType("BOOK");
+            case CD   -> list = manager.filterByType("CD");
+            case DVD  -> list = manager.filterByType("DVD");
+            default   -> list = manager.showAllMedia();
+        }
+
+        list.sort((a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle()));
+        uiItems.setAll(list);
+    }
+
+    private void setFilterUIValue(String value) {
+        if (typeFilterBox == null) return;
+        programmaticFilterChange = true;
+        try {
+            typeFilterBox.setValue(value);
+        } finally {
+            programmaticFilterChange = false;
+        }
+    }
+
+    // ------------------- Dialog -------------------
 
     private MediumFormResult showMediumFormDialog(
             String dialogTitle,
@@ -160,17 +313,15 @@ public class CollectionController {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        // Typ Dropdown
         ComboBox<String> typeBox = new ComboBox<>();
         typeBox.getItems().addAll("BOOK", "CD", "DVD");
-        typeBox.setValue(presetType == null || presetType.isBlank() ? "BOOK" : presetType);
+        typeBox.setValue((presetType == null || presetType.isBlank()) ? "BOOK" : presetType);
 
         TextField titleField = new TextField(presetTitle);
         TextField creatorField = new TextField(presetCreator);
         TextField genreField = new TextField(presetGenre);
         TextField yearField = new TextField(presetYear);
 
-        // Typ-spezifisch
         Label publisherLabel = new Label("Verlag:");
         TextField publisherField = new TextField(presetPublisher);
 
@@ -183,8 +334,6 @@ public class CollectionController {
         grid.addRow(3, new Label("Genre:"), genreField);
         grid.addRow(4, new Label("Jahr:"), yearField);
 
-        // Zeile 5 wird dynamisch (Verlag ODER Laufzeit)
-        // wir legen beide an und blenden um
         grid.addRow(5, publisherLabel, publisherField);
         grid.addRow(6, runtimeLabel, runtimeField);
 
@@ -238,7 +387,7 @@ public class CollectionController {
                     showWarn("Fehlende Eingaben", "Bitte gib einen Verlag ein.");
                     evt.consume();
                 }
-            } else { // CD / DVD
+            } else {
                 if (runtimeStr.isBlank()) {
                     showWarn("Fehlende Eingaben", "Bitte gib eine Laufzeit ein.");
                     evt.consume();
@@ -256,7 +405,6 @@ public class CollectionController {
         Optional<ButtonType> res = dialog.showAndWait();
         if (res.isEmpty() || res.get() != saveBtn) return null;
 
-        // Ergebnis bauen
         String t = safeTrim(typeBox.getValue());
         int year = Integer.parseInt(yearField.getText().trim());
 
@@ -277,9 +425,9 @@ public class CollectionController {
     private Medium buildMediumFromForm(MediumFormResult r) {
         return switch (r.type) {
             case "BOOK" -> new Book(r.title, r.creator, r.genre, r.year, r.publisher);
-            case "CD" -> new Cd(r.title, r.creator, r.genre, r.year, r.runtime);
-            case "DVD" -> new Dvd(r.title, r.creator, r.genre, r.year, r.runtime);
-            default -> null;
+            case "CD"   -> new Cd(r.title, r.creator, r.genre, r.year, r.runtime);
+            case "DVD"  -> new Dvd(r.title, r.creator, r.genre, r.year, r.runtime);
+            default     -> null;
         };
     }
 
@@ -307,96 +455,6 @@ public class CollectionController {
         return s == null ? "" : s.trim();
     }
 
-    // ------------------- Filter / Suche -------------------
-
-    @FXML
-    public void showAll() {
-        var list = manager.showAllMedia();
-
-        list.sort(
-                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
-        );
-
-        mediaListView.setItems(FXCollections.observableArrayList(list));
-    }
-
-    @FXML
-    public void showBooks() {
-        var list = manager.filterByType("BOOK");
-
-        list.sort(
-                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
-        );
-
-        mediaListView.setItems(FXCollections.observableArrayList(list));
-    }
-
-
-    @FXML
-    public void showCds() {
-        var list = manager.filterByType("CD");
-
-        list.sort(
-                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
-        );
-
-        mediaListView.setItems(FXCollections.observableArrayList(list));
-    }
-
-
-    @FXML
-    public void showDvds() {
-        var list = manager.filterByType("DVD");
-
-        list.sort(
-                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
-        );
-
-        mediaListView.setItems(FXCollections.observableArrayList(list));
-    }
-
-
-    private void refreshByCurrentFilter() {
-        if (typeFilterBox == null || typeFilterBox.getValue() == null) {
-            showAll();
-            return;
-        }
-        switch (typeFilterBox.getValue()) {
-            case "Bücher" -> showBooks();
-            case "CDs" -> showCds();
-            case "DVDs" -> showDvds();
-            default -> showAll();
-        }
-    }
-
-
-    public void applyQuery(String q) {
-        if (q == null || q.isBlank()) {
-            refreshByCurrentFilter();
-            return;
-        }
-
-        LinkedHashSet<Medium> set = new LinkedHashSet<>();
-        set.addAll(manager.searchByTitle(q));
-        set.addAll(manager.searchByCreator(q));
-
-        try {
-            int year = Integer.parseInt(q.trim());
-            set.addAll(manager.searchByYear(year));
-        } catch (NumberFormatException ignore) {}
-
-        set.addAll(manager.searchByGenre(q));
-
-        var list = new java.util.ArrayList<>(set);
-
-        list.sort(
-                (a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle())
-        );
-
-        mediaListView.setItems(FXCollections.observableArrayList(list));
-    }
-
-
     // ------------------- Navigation -------------------
 
     private void goHomeFromHeader() {
@@ -416,9 +474,8 @@ public class CollectionController {
         }
     }
 
-    // ------------------- Placeholder für deine Buttons -------------------
+    // ------------------- Placeholder Buttons -------------------
 
-    @FXML private void deleteSelected() { showWarn("TODO", "deleteSelected() ist noch nicht implementiert."); }
     @FXML private void toggleFavorite() { showWarn("TODO", "toggleFavorite() ist noch nicht implementiert."); }
     @FXML private void setFolderForSelected() { showWarn("TODO", "setFolderForSelected() ist noch nicht implementiert."); }
 

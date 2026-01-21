@@ -11,39 +11,6 @@
     "type": "BOOK"
   },
   {
-    "runtime": 9,
-    "title": "Thriller",
-    "creator": "Michael Jackson",
-    "genre": "Pop",
-    "year": 1982,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "CD"
-  },
-  {
-    "runtime": 136,
-    "title": "Matrix",
-    "creator": "Wachowskis",
-    "genre": "Sci-Fi",
-    "year": 1999,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "DVD"
-  },
-  {
-    "runtime": 48,
-    "title": "21",
-    "creator": "Adele",
-    "genre": "Pop",
-    "year": 2011,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "CD"
-  },
-  {
     "publisher": "Reclam",
     "title": "Faust",
     "creator": "Goethe",
@@ -143,44 +110,11 @@
     "type": "BOOK"
   },
   {
-    "runtime": 88,
-    "title": "Der König der Löwen",
-    "creator": "Disney",
-    "genre": "Animation",
-    "year": 1994,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "DVD"
-  },
-  {
     "runtime": 148,
     "title": "Inception",
     "creator": " Warner Bros.",
     "genre": "Sci-Fi",
     "year": 2010,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "DVD"
-  },
-  {
-    "runtime": 142,
-    "title": "Forrest Gump",
-    "creator": "Paramount Pictures",
-    "genre": "Drama",
-    "year": 1994,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "DVD"
-  },
-  {
-    "runtime": 120,
-    "title": "Crazy Rich Asian",
-    "creator": "Warner Bros",
-    "genre": "Romantik/Komödie",
-    "year": 2018,
     "favorite": false,
     "rating": 0,
     "folder": "",
