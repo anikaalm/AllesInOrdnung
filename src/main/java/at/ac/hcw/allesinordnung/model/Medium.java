@@ -1,3 +1,4 @@
+// Verwalten von Medien
 package at.ac.hcw.allesinordnung.model;
 
 import java.util.Objects;

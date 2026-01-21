@@ -1,3 +1,4 @@
+// Schriftgröße, Reaktion auf Klick und Szenen Wechsel
 package at.ac.hcw.allesinordnung.controller;
 
 import javafx.application.Platform;

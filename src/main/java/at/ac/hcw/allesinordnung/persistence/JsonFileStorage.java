@@ -1,4 +1,4 @@
-
+// persistance ist wo die JSON Datei gespeichert ist
 package at.ac.hcw.allesinordnung.persistence;
 
 import at.ac.hcw.allesinordnung.model.Medium;

@@ -218,5 +218,16 @@
     "rating": 0,
     "folder": "",
     "type": "DVD"
+  },
+  {
+    "publisher": "Anaconda",
+    "title": "Das Kapital",
+    "creator": "Karl Marx",
+    "genre": "Roman",
+    "year": 1867,
+    "favorite": false,
+    "rating": 0,
+    "folder": "",
+    "type": "BOOK"
   }
 ]

@@ -1,4 +1,5 @@
-
+//Navigation zwischen den Seiten (Bücher, CDs, DVDs, Alle),
+// Initialisierung des Headers, Szenenwechsel (FXML laden, Scene setzen)
 package at.ac.hcw.allesinordnung.controller;
 
 import javafx.fxml.FXML;

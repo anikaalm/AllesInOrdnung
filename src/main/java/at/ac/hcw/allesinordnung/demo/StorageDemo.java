@@ -1,4 +1,4 @@
-package at.ac.hcw.allesinordnung.demo;
+/* package at.ac.hcw.allesinordnung.demo;
 
 import at.ac.hcw.allesinordnung.model.Book;
 import at.ac.hcw.allesinordnung.model.Cd;
@@ -43,3 +43,4 @@ public class StorageDemo {
         }
     }
 }
+*/

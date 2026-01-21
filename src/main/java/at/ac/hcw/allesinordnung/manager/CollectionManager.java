@@ -1,3 +1,6 @@
+// Der CollectionManager hält alle Medien (Book/Cd/Dvd) in einer Liste,
+// Methoden: Anzeigen, Hinzufügen, Löschen, Bearbeiten, Suchen und Sortieren
+// Änderungen sofort in die JSON-Datei gespeichert werden.
 package at.ac.hcw.allesinordnung.manager;
 
 import at.ac.hcw.allesinordnung.model.Book;

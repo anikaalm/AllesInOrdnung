@@ -39,10 +39,8 @@
                 <Label text="   "/>
 
                 <!-- Aktionsbuttons rechts -->
+                <Button text="➕ Hinzufügen" onAction="#addMedium"/>
                 <Button text="✎ Bearbeiten" onAction="#editSelected"/>
-                <Button text="🗑 Löschen" onAction="#deleteSelected"/>
-                <Button text="★ Favorit" onAction="#toggleFavorite"/>
-                <Button text="📁 Ordner" onAction="#setFolderForSelected"/>
             </HBox>
         </VBox>
     </top>

@@ -1,3 +1,4 @@
+//damit GSON weiß welche Unterklasse ein Medium in JSON ist
 package at.ac.hcw.allesinordnung.persistence;
 
 import at.ac.hcw.allesinordnung.model.Book;
