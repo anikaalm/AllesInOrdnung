@@ -10,7 +10,8 @@
            stylesheets="@dark-theme.css"
            styleClass="root">
 
-    <Label text="Willkommen :)"
-           style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+    <Label fx:id="welcomeTitle"
+           text="Willkommen :)"
+           styleClass="welcome-title"/>
 
 </StackPane>

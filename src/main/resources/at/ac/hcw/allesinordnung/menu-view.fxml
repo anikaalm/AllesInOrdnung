@@ -5,13 +5,14 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
+            fx:id="root"
             fx:controller="at.ac.hcw.allesinordnung.controller.MenuController"
             stylesheets="@dark-theme.css"
             styleClass="root">
 
     <!-- HEADER -->
     <top>
-        <fx:include source="header.fxml"/>
+        <fx:include fx:id="header" source="header.fxml"/>
     </top>
 
     <!-- MENÜ LINKS MITTIG -->

@@ -11,18 +11,36 @@ import javafx.stage.Stage;
 
 public class MenuController {
 
+    @FXML private HeaderController headerController;
+
+    @FXML
+    private void initialize() {
+        // Im Menü: "Willkommen :)" anzeigen
+        if (headerController != null) {
+            headerController.setTitle("Willkommen :)");
+            headerController.setWelcomeVisible(true);
+        }
+    }
+
 
     // Gemeinsamer Loader für die Medienübersicht (main-view.fxml)
     private void gotoCollection(Node any, java.util.function.Consumer<CollectionController> afterLoad) {
         try {
-            var url = getClass().getResource("/at/ac/hcw/allesinordnung/main-view.fxml");
-            if (url == null) throw new IllegalStateException("main-view.fxml nicht gefunden");
+            var url = getClass().getResource("/at/ac/hcw/allesinordnung/collection-view.fxml");
+            if (url == null) throw new IllegalStateException("collection-view.fxml nicht gefunden");
 
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
+
             CollectionController controller = loader.getController();
 
+
+            if (controller == null) {
+                throw new IllegalStateException("Controller aus collection-view.fxml ist null");
+            }
+
             if (afterLoad != null) afterLoad.accept(controller);
+
 
             Scene newScene = new Scene(root, 900, 650);
             var css = getClass().getResource("/at/ac/hcw/allesinordnung/dark-theme.css");

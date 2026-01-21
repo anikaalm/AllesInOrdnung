@@ -4,13 +4,25 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.text.Font;
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(
+
+        Font loaded = Font.loadFont(
+                getClass().getResourceAsStream(
+                        "/at/ac/hcw/allesinordnung/fonts/PressStart2P-Regular.ttf"
+                ),
+                10 // Größe nur für die Registrierung, CSS bestimmt später die echte Größe
+        );
+        System.out.println("Loaded font: " + (loaded != null ? loaded.getName() : "null"));
+
+
+
+                FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
                         "/at/ac/hcw/allesinordnung/welcome-view.fxml"
                 )

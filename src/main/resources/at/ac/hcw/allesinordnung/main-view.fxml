@@ -2,47 +2,71 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.ac.hcw.allesinordnung.controller.CollectionController"
             stylesheets="@dark-theme.css"
-            styleClass="root">
+            fx:controller="at.ac.hcw.allesinordnung.controller.CollectionController">
 
+    <!-- TOP leer lassen, damit nichts Platz wegnimmt -->
     <top>
-        <VBox spacing="10">
-            <fx:include fx:id="header" source="header.fxml"/>
-
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <padding>
-                    <Insets top="8" right="16" bottom="8" left="16"/>
-                </padding>
-
-                <Label text="Medienübersicht">
-                    <font>
-                        <Font size="36"/>
-                    </font>
-                </Label>
-
-                <Pane HBox.hgrow="ALWAYS"/>
-
-                <Button text="➕ Hinzufügen" onAction="#addMedium"/>
-                <Button text="✎ Bearbeiten" onAction="#editSelected"/>
-            </HBox>
-        </VBox>
+        <Pane minHeight="0"/>
     </top>
 
+    <!-- CENTER enthält: Spacer (drückt nach unten) + Titel/Suche/Menu -->
+
     <center>
-        <ListView fx:id="mediaListView" prefHeight="500" prefWidth="800"/>
+        <VBox spacing="0">
+
+            <!-- fester Versatz: wie weit "unterhalb" beginnen (anpassen!) -->
+            <Region minHeight="40"/>
+
+            <!-- flexibler Spacer: nimmt den übrigen Platz über dem Inhalt -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Inhalt: Titel links + rechts daneben Suche -->
+            <HBox spacing="24" alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="0" right="24" bottom="24" left="24"/>
+                </padding>
+
+                <!-- Linke Spalte: großer Titel + Menü -->
+                <VBox spacing="24" alignment="TOP_LEFT">
+                    <children>
+                        <Label text="Willkommen :)" styleClass="welcome-title"/>
+                        <VBox spacing="16" styleClass="welcome-menu">
+                            <children>
+                                <Button text="Bücher"/>
+                                <Button text="DVDs"/>
+                                <Button text="CDs"/>
+                                <Button text="ganzes Verzeichnis"/>
+                                <Button text="Datei erstellen"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Mittel-Spacer schiebt die rechte Spalte wirklich nach rechts -->
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <!-- Rechte Spalte: Suche (oben am Titel ausgerichtet) -->
+                <VBox spacing="8" alignment="TOP_RIGHT">
+                    <children>
+                        <TextField promptText="Suchen..." styleClass="text-field" prefWidth="260"/>
+                        <Button text="🔎" styleClass="icon-btn"/>
+                    </children>
+                </VBox>
+            </HBox>
+
+            <!-- kleiner unterer Rand, damit nichts am Fenster klebt -->
+            <Region minHeight="24"/>
+        </VBox>
     </center>
 
+
+    <!-- BOTTOM optional leer -->
     <bottom>
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-            <padding>
-                <Insets top="8" right="16" bottom="12" left="16"/>
-            </padding>
-        </HBox>
+        <Pane minHeight="0"/>
     </bottom>
 
 </BorderPane>
