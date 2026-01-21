@@ -11,17 +11,6 @@
     "type": "BOOK"
   },
   {
-    "publisher": "Reclam",
-    "title": "Faust",
-    "creator": "Goethe",
-    "genre": "Klassik",
-    "year": 2000,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "BOOK"
-  },
-  {
     "publisher": "Pan Macmillan",
     "title": "Before the coffee gets cold",
     "creator": "Toshikazu Kawaguchi",
@@ -31,17 +20,6 @@
     "rating": 0,
     "folder": "",
     "type": "BOOK"
-  },
-  {
-    "runtime": 42,
-    "title": "Thriller",
-    "creator": "Michael Jacksons",
-    "genre": "Pop",
-    "year": 1982,
-    "favorite": false,
-    "rating": 0,
-    "folder": "",
-    "type": "CD"
   },
   {
     "runtime": 42,

@@ -72,6 +72,36 @@ public class BooksController {
     }
 
 
+    @FXML
+    public void deleteMedium() {
+        Medium selected = booksList.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showWarn("Kein Eintrag gewählt", "Bitte wähle zuerst ein Buch aus.");
+            return;
+        }
+        if (!(selected instanceof Book)) {
+            showWarn("Falscher Typ", "Der ausgewählte Eintrag ist kein Buch.");
+            return;
+        }
+
+        // Optional: Sicherheitsabfrage
+        Alert confirm = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "Willst du \"" + selected.getTitle() + "\" wirklich löschen?",
+                ButtonType.YES, ButtonType.NO
+        );
+        confirm.setHeaderText("Löschen bestätigen");
+
+        Optional<ButtonType> res = confirm.showAndWait();
+        if (res.isEmpty() || res.get() != ButtonType.YES) return;
+
+        // Löschen (Model + JSON)
+        manager.deleteMedium(selected);
+
+        // UI aktualisieren
+        loadBooks();
+    }
 
 
 

@@ -36,6 +36,7 @@
                 <!-- Aktionsbuttons rechts -->
                 <Button text="➕ Hinzufügen" onAction="#addBook"/>
                 <Button text="✎ Bearbeiten" onAction="#editBook"/>
+                <Button text="✎ Löschen" onAction="#deleteMedium"/>
             </HBox>
         </VBox>
     </top>
